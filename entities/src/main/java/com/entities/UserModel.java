@@ -34,7 +34,14 @@ public class UserModel implements UserDetails {
     @Size(min = 8)
     private String password;
 
-    private Set<String> roles = new HashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private Student student;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private Teacher teacher;
 
     public UserModel(String email, String username, String password, String role) {
         this.email = email;
@@ -83,11 +90,10 @@ public class UserModel implements UserDetails {
     }
 
     public void setRoles(String role) {
+        this.roles = new HashSet<>();
         if (role.equals(UserRole.ADMIN.name()) ||
-                role.equals(UserRole.DIRECTOR.name()) ||
                 role.equals(UserRole.STUDENT.name()) ||
-                role.equals(UserRole.TEACHER.name()) ||
-                role.equals(UserRole.PARENT.name())) {
+                role.equals(UserRole.TEACHER.name())) {
             this.roles.add(UserRole.valueOf(role).name());
         }
     }
