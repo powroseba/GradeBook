@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,14 +29,13 @@ public class SchoolClass {
     @Enumerated(EnumType.STRING)
     private Profile profile;
 
-    @OneToMany(targetEntity = Excercise.class, fetch = FetchType.LAZY, mappedBy = "schoolClass")
-    private Set<Excercise> excercises;
+    @OneToMany(targetEntity = Exercise.class, fetch = FetchType.LAZY, mappedBy = "schoolClass")
+    private Set<Exercise> exercises = new HashSet<>();
 
     @OneToMany(targetEntity = Student.class, fetch = FetchType.LAZY, mappedBy = "schoolClass")
-    private Set<Student> students;
+    private Set<Student> students = new HashSet<>();
 
-    public SchoolClass(Teacher tutor, String name, Profile profile) {
-        this.tutor = tutor;
+    public SchoolClass(String name, Profile profile) {
         this.name = name;
         this.profile = profile;
     }

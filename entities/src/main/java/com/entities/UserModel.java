@@ -35,7 +35,7 @@ public class UserModel implements UserDetails {
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> roles;
+    private Set<String> roles = new HashSet<>();;
 
     @OneToOne(fetch = FetchType.EAGER)
     private Student student;
@@ -90,7 +90,6 @@ public class UserModel implements UserDetails {
     }
 
     public void setRoles(String role) {
-        this.roles = new HashSet<>();
         if (role.equals(UserRole.ADMIN.name()) ||
                 role.equals(UserRole.STUDENT.name()) ||
                 role.equals(UserRole.TEACHER.name())) {
@@ -112,6 +111,25 @@ public class UserModel implements UserDetails {
 
     public void setPassword(String password) {
         this.password = new BCryptPasswordEncoder().encode(password);
+    }
+
+    public void setUserDetails(UserModelDetails userModelDetails) {
+        if (this.roles.contains(UserRole.TEACHER.name())) {
+            this.teacher = (Teacher) userModelDetails;
+        }
+        if (this.roles.contains(UserRole.STUDENT.name())) {
+            this.student = (Student)userModelDetails;
+        }
+    }
+
+    public UserModelDetails getUserModelDetails() {
+        if (this.roles.contains(UserRole.TEACHER.name())) {
+            return teacher;
+        }
+        if (this.roles.contains(UserRole.STUDENT.name())) {
+            return student;
+        }
+        return null;
     }
 }
 
