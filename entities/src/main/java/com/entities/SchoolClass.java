@@ -29,10 +29,10 @@ public class SchoolClass {
     @Enumerated(EnumType.STRING)
     private Profile profile;
 
-    @OneToMany(targetEntity = Exercise.class, fetch = FetchType.LAZY, mappedBy = "schoolClass")
+    @OneToMany(targetEntity = Exercise.class, fetch = FetchType.EAGER, mappedBy = "schoolClass")
     private Set<Exercise> exercises = new HashSet<>();
 
-    @OneToMany(targetEntity = Student.class, fetch = FetchType.LAZY, mappedBy = "schoolClass")
+    @OneToMany(targetEntity = Student.class, fetch = FetchType.EAGER, mappedBy = "schoolClass")
     private Set<Student> students = new HashSet<>();
 
     public SchoolClass(String name, Profile profile) {

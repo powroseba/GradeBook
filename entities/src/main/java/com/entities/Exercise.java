@@ -25,17 +25,17 @@ public class Exercise {
     @Enumerated(EnumType.STRING)
     private Exercises nameOfExercise;
 
-    @OneToMany(targetEntity = Grade.class, fetch = FetchType.LAZY, mappedBy = "exercise")
-    private Set<Grade> grades = new HashSet<>();;
+    @OneToMany(targetEntity = Grade.class, fetch = FetchType.EAGER, mappedBy = "exercise")
+    private Set<Grade> grades = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "SCHOOL_CLASS_ID")
     private SchoolClass schoolClass;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "EXERCISE_STUDENT",
-            joinColumns = {@JoinColumn(name = "EXERCISE_ID", nullable = false, updatable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "STUDENT_ID", nullable = false, updatable = false) })
+            joinColumns = {@JoinColumn(name = "EXERCISE_ID") },
+            inverseJoinColumns = { @JoinColumn(name = "STUDENT_ID") })
     private Set<Student> students  = new HashSet<>();
 
     public Exercise(Exercises nameOfExercise) {

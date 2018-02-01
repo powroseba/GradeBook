@@ -30,16 +30,17 @@ public class Teacher extends UserModelDetails {
     private String lastName;
 
     @NotNull
+    @Temporal(TemporalType.DATE)
     private Date yearOfBirth;
 
-    @OneToOne(mappedBy = "teacher", targetEntity = UserModel.class, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "teacher", targetEntity = UserModel.class)
     @JoinColumn(nullable = true, name = "USER_ID")
     private UserModel userModel;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private SchoolClass schoolClass;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     private Exercise exercise;
 
     public Teacher(String firstName, String lastName, Date yearOfBirth) {

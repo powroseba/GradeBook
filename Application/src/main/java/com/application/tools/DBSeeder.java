@@ -1,4 +1,4 @@
-package com.application;
+package com.application.tools;
 
 import com.entities.*;
 import com.repositories.*;
@@ -126,8 +126,48 @@ public class DBSeeder {
         studentThreeUserModel.setUserDetails(studentThree);
         studentThree.setUserModel(studentThreeUserModel);
 
+        studentOne.setSchoolClass(schoolClassOne);
+        schoolClassOne.getStudents().add(studentOne);
+        studentTwo.setSchoolClass(schoolClassOne);
+        schoolClassOne.getStudents().add(studentTwo);
+        studentThree.setSchoolClass(schoolClassOne);
+        schoolClassOne.getStudents().add(studentThree);
 
+        studentOne.getExercises().add(exerciseOne);
+        exerciseOne.getStudents().add(studentOne);
+        studentTwo.getExercises().add(exerciseOne);
+        exerciseOne.getStudents().add(studentTwo);
+        studentThree.getExercises().add(exerciseOne);
+        exerciseOne.getStudents().add(studentThree);
 
+        studentOne.getGrades().add(gradeOne);
+        gradeOne.setStudent(studentOne);
+        studentTwo.getGrades().add(gradeTwo);
+        gradeTwo.setStudent(studentTwo);
+        studentThree.getGrades().add(gradeThree);
+        gradeThree.setStudent(studentThree);
+
+        gradeOne.setExercise(exerciseOne);
+        exerciseOne.getGrades().add(gradeOne);
+        gradeTwo.setExercise(exerciseOne);
+        exerciseOne.getGrades().add(gradeTwo);
+        gradeThree.setExercise(exerciseOne);
+        exerciseOne.getGrades().add(gradeThree);
+
+        userModelRepository.save(studentOneUserModel);
+        userModelRepository.save(studentTwoUserModel);
+        userModelRepository.save(studentThreeUserModel);
+
+        studentRepository.save(studentOne);
+        studentRepository.save(studentTwo);
+        studentRepository.save(studentThree);
+
+        gradeRepository.save(gradeOne);
+        gradeRepository.save(gradeTwo);
+        gradeRepository.save(gradeThree);
+
+        exerciseRepository.save(exerciseOne);
+        exerciseRepository.save(exerciseTwo);
     }
 
     public Date getDateInFormat(int year, int month, int day) throws ParseException {

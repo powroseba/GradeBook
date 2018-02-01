@@ -22,7 +22,7 @@ public class Grade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DateTimeFormat(pattern="dd/MM/YY")
+    @Temporal(TemporalType.DATE)
     @NotNull
     private Date date;
 
@@ -33,12 +33,12 @@ public class Grade {
 
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "STUDENT_ID")
+    @ManyToOne
+    @JoinColumn(name = "STUDENT_ID")
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "EXCERCISE_ID")
+    @ManyToOne
+    @JoinColumn(name = "EXCERCISE_ID")
     private Exercise exercise;
 
     public Grade(Date date, int grade, String description) {

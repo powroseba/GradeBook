@@ -31,20 +31,21 @@ public class Student extends UserModelDetails {
     private String lastName;
 
     @NotNull
+    @Temporal(TemporalType.DATE)
     private Date yearOfBirth;
 
-    @OneToOne(mappedBy = "student", targetEntity = UserModel.class, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "student", targetEntity = UserModel.class)
     @JoinColumn(nullable = true, name = "USER_ID")
     private UserModel userModel;
 
-    @OneToMany(targetEntity = Grade.class, fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToMany(targetEntity = Grade.class, mappedBy = "student")
     private Set<Grade> grades = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "SCHOOL_CLASS_ID")
+    @ManyToOne
+    @JoinColumn(name = "SCHOOL_CLASS_ID")
     private SchoolClass schoolClass;
 
-    @ManyToMany(mappedBy = "students", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "students")
     private Set<Exercise> exercises = new HashSet<>();
 
     public Student(String firstName, String lastName, Date yearOfBirth) {
