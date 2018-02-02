@@ -34,7 +34,7 @@ public class UserModel implements UserDetails {
     @Size(min = 8)
     private String password;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> roles = new HashSet<>();
 
     @OneToOne(fetch = FetchType.EAGER)

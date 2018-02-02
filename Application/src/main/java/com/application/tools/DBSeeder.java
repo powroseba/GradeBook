@@ -85,8 +85,8 @@ public class DBSeeder {
         exerciseOne = exerciseRepository.save(exerciseOne);
         exerciseTwo = exerciseRepository.save(exerciseTwo);
 
-        teacherOne = teacherRepository.save(teacherOne);
-        teacherTwo = teacherRepository.save(teacherTwo);
+        teacherRepository.save(teacherOne);
+        teacherRepository.save(teacherTwo);
 
         //CREATING STUDENT TO CLASS ONE
         UserModel studentOneUserModel = new UserModel(
@@ -167,6 +167,85 @@ public class DBSeeder {
         gradeRepository.save(gradeThree);
 
         exerciseRepository.save(exerciseOne);
+
+        //CREATING STUDENT TO CLASS ONE
+        UserModel studentFourUserModel = new UserModel(
+                "adam97@mail.com", "adam97", "studentfour",UserRole.STUDENT.name());
+        UserModel studentFiveUserModel = new UserModel(
+                "emilia97@mail.com", "emilia97", "studentfive",UserRole.STUDENT.name());
+        UserModel studentSixUserModel = new UserModel(
+                "krystian97@mail.com", "krystian97", "studentfive",UserRole.STUDENT.name());
+
+
+        Student studentFour = new Student("Adam","Kucharz",getDateInFormat(1997, 1,2));
+        Student studentFive = new Student("Emilia","Pliszka",getDateInFormat(1997, 2,3));
+        Student studentSix = new Student("Radek","Szafa",getDateInFormat(1997, 1,23));
+
+        Grade gradeFour = new Grade(getDateInFormat(2018, 1,3), 3, "Sprawdzian");
+        Grade gradeFive = new Grade(getDateInFormat(2018, 1,3), 5, "Sprawdzian");
+        Grade gradeSix = new Grade(getDateInFormat(2018, 1,3), 5, "Sprawdzian");
+
+        //SAVING
+        studentFourUserModel = userModelRepository.save(studentFourUserModel);
+        studentFiveUserModel = userModelRepository.save(studentFiveUserModel);
+        studentSixUserModel = userModelRepository.save(studentSixUserModel);
+
+        studentFour = studentRepository.save(studentFour);
+        studentFive = studentRepository.save(studentFive);
+        studentSix = studentRepository.save(studentSix);
+
+        gradeFour = gradeRepository.save(gradeFour);
+        gradeFive = gradeRepository.save(gradeFive);
+        gradeSix = gradeRepository.save(gradeSix);
+
+        //RELATIONS
+        studentFourUserModel.setUserDetails(studentFour);
+        studentFour.setUserModel(studentFourUserModel);
+        studentFiveUserModel.setUserDetails(studentFive);
+        studentFive.setUserModel(studentFiveUserModel);
+        studentSixUserModel.setUserDetails(studentSix);
+        studentSix.setUserModel(studentSixUserModel);
+
+        studentFour.setSchoolClass(schoolClassTwo);
+        schoolClassTwo.getStudents().add(studentFour);
+        studentFive.setSchoolClass(schoolClassTwo);
+        schoolClassTwo.getStudents().add(studentFive);
+        studentSix.setSchoolClass(schoolClassTwo);
+        schoolClassTwo.getStudents().add(studentSix);
+
+        studentFour.getExercises().add(exerciseTwo);
+        exerciseTwo.getStudents().add(studentFour);
+        studentFive.getExercises().add(exerciseTwo);
+        exerciseTwo.getStudents().add(studentFive);
+        studentSix.getExercises().add(exerciseTwo);
+        exerciseTwo.getStudents().add(studentSix);
+
+        studentFour.getGrades().add(gradeFour);
+        gradeFour.setStudent(studentFour);
+        studentFive.getGrades().add(gradeFive);
+        gradeFive.setStudent(studentFive);
+        studentSix.getGrades().add(gradeSix);
+        gradeSix.setStudent(studentSix);
+
+        gradeFour.setExercise(exerciseTwo);
+        exerciseTwo.getGrades().add(gradeFour);
+        gradeFive.setExercise(exerciseTwo);
+        exerciseTwo.getGrades().add(gradeFive);
+        gradeSix.setExercise(exerciseTwo);
+        exerciseTwo.getGrades().add(gradeSix);
+
+        userModelRepository.save(studentFourUserModel);
+        userModelRepository.save(studentFiveUserModel);
+        userModelRepository.save(studentSixUserModel);
+
+        studentRepository.save(studentFour);
+        studentRepository.save(studentFive);
+        studentRepository.save(studentSix);
+
+        gradeRepository.save(gradeFour);
+        gradeRepository.save(gradeFive);
+        gradeRepository.save(gradeSix);
+
         exerciseRepository.save(exerciseTwo);
     }
 
