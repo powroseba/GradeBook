@@ -27,4 +27,9 @@ public class UserDetailsController {
     public void changeEmail(HttpServletRequest request, @RequestBody @Valid UserData userData) {
         userDetailsService.changeEmail(request, userData);
     }
+
+    @PostMapping(value = "/pass")
+    public void changePassword(HttpServletRequest request, @RequestBody @Valid UserData userData) {
+        userDetailsService.changePassword(request, userData);
+    }
 }

@@ -21,5 +21,13 @@ public class UserData {
     private String username;
 
     @Size(min = 8)
-    private String password;
+    private String currentPassword;
+
+    @Size(min = 8)
+    private String newPassword;
+
+    @Size(min = 8)
+    private String newRepeatPassword;
+
+
 }
