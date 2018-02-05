@@ -49,7 +49,7 @@ public class TokenAuthenticationService {
         return null;
     }
 
-    static Collection <GrantedAuthority> generateAuthorities(String roleChain) {
+    private static Collection <GrantedAuthority> generateAuthorities(String roleChain) {
         Collection <GrantedAuthority> authorities = new HashSet<>();
 
         if (roleChain.contains(UserRole.ADMIN.name())) {
@@ -64,4 +64,6 @@ public class TokenAuthenticationService {
 
         return authorities;
     }
+
+
 }

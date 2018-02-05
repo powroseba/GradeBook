@@ -25,7 +25,7 @@ public class DBSeeder {
     @Autowired
     private GradeRepository gradeRepository;
 
-    @PostConstruct
+//    @PostConstruct
     public void seed() throws ParseException {
         SchoolClass schoolClassOne = new SchoolClass("1 A", Profile.CHEMISTRY_AND_BIOLOGY);
         SchoolClass schoolClassTwo = new SchoolClass("2 B", Profile.MATHEMATICS);
