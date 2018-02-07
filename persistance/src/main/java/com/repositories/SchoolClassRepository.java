@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SchoolClassRepository extends JpaRepository<SchoolClass, Long>{
+    SchoolClass findByName(String name);
 }

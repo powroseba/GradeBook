@@ -1,8 +1,9 @@
 package com.application.service;
 
 
-import javax.mail.MessagingException;
+import com.application.exceptions.SchoolClassNotFound;
+import com.domain.AuthModel;
 
 public interface RegistrationService {
-    void signUp() throws MessagingException;
+    void signUp(AuthModel authModel);
 }
