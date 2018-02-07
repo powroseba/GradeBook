@@ -1,6 +1,6 @@
 package com.application.service;
 
-import com.application.model.UserData;
+import com.domain.UserData;
 
 import javax.servlet.http.HttpServletRequest;
 

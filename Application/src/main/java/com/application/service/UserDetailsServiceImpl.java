@@ -2,8 +2,8 @@ package com.application.service;
 
 import com.application.exceptions.UncorrectPasswordsException;
 import com.application.exceptions.UserNotFoundException;
-import com.application.model.UserData;
 import com.application.tools.TokenUsernameParserService;
+import com.domain.UserData;
 import com.entities.UserModel;
 import com.repositories.UserModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;

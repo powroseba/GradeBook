@@ -247,6 +247,8 @@ public class DBSeeder {
         gradeRepository.save(gradeSix);
 
         exerciseRepository.save(exerciseTwo);
+        UserModel userModel = new UserModel("admin@mail.com", "admin","adminpass",UserRole.ADMIN.name());
+        userModelRepository.save(userModel);
     }
 
     public Date getDateInFormat(int year, int month, int day) throws ParseException {
