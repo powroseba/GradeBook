@@ -14,8 +14,8 @@ public class TokenUsernameParserService {
     public static String parseUsername(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
         Claims claims = Jwts.parser()
-                .setSigningKey("ThisIsASecret")
-                .parseClaimsJws(token.replace("Bearer", "")).getBody();
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
         return claims.getSubject();
     }
 }

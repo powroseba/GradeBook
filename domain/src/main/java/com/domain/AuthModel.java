@@ -40,10 +40,11 @@ public class AuthModel {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
-    public AuthModel(String email, String role, String schoolClassName, Date dateOfBirth) {
+    public AuthModel(String email, String firstName, String lastName, String role, Date dateOfBirth) {
         this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.role = role;
-        this.schoolClassName = schoolClassName;
         this.dateOfBirth = dateOfBirth;
     }
 }

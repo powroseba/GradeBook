@@ -17,7 +17,7 @@ public class UserData {
     @Email
     private String email;
 
-    @Size(min = 4)
+    @Size(min = 4, max = 15)
     private String username;
 
     @Size(min = 8)
@@ -28,6 +28,4 @@ public class UserData {
 
     @Size(min = 8)
     private String newRepeatPassword;
-
-
 }
