@@ -27,11 +27,11 @@ public class UserModel implements UserDetails {
     private String email;
 
     @NotNull
-    @Size(min = 6)
+    @Size(min = 6, max = 15)
     private String username;
 
     @NotNull
-    @Size(min = 8)
+    @Size(min = 8, max = 61)
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)

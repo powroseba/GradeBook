@@ -23,16 +23,16 @@ public class Student extends UserModelDetails {
     private Long id;
 
     @NotNull
-    @Size(min = 3)
+    @Size(min = 3, max = 15)
     private String firstName;
 
     @NotNull
-    @Size(min = 3)
+    @Size(min = 3, max = 20)
     private String lastName;
 
     @NotNull
     @Temporal(TemporalType.DATE)
-    private Date yearOfBirth;
+    private Date dateOfBirth;
 
     @OneToOne(mappedBy = "student", targetEntity = UserModel.class)
     @JoinColumn(nullable = true, name = "USER_ID")
@@ -48,9 +48,9 @@ public class Student extends UserModelDetails {
     @ManyToMany(mappedBy = "students")
     private Set<Exercise> exercises = new HashSet<>();
 
-    public Student(String firstName, String lastName, Date yearOfBirth) {
+    public Student(String firstName, String lastName, Date dateOfBirth) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.yearOfBirth = yearOfBirth;
+        this.dateOfBirth = dateOfBirth;
     }
 }

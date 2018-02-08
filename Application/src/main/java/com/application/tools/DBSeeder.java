@@ -61,8 +61,8 @@ public class DBSeeder {
         teacherOne.setUserModel(userModelOne);
         teacherTwo.setUserModel(userModelTwo);
 
-        teacherOne.setExercise(exerciseOne);
-        teacherTwo.setExercise(exerciseTwo);
+        teacherOne.getExercises().add(exerciseOne);
+        teacherTwo.getExercises().add(exerciseTwo);
         exerciseOne.setTeacher(teacherOne);
         exerciseTwo.setTeacher(teacherTwo);
 

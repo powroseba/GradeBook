@@ -19,7 +19,8 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "exercise")
+    @ManyToOne
+    @JoinColumn(name = "TEACHER_ID")
     private Teacher teacher;
 
     @Enumerated(EnumType.STRING)

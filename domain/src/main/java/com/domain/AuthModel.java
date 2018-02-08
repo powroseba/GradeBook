@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -30,18 +32,18 @@ public class AuthModel {
     @NotNull
     private String role;
 
-    @NotNull
     private String schoolClassName;
 
-    private String excercise;
+    private String exercise;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-    private Date yearOfBirth;
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
 
-    public AuthModel(String email, String role, String schoolClassName, Date yearOfBirth) {
+    public AuthModel(String email, String role, String schoolClassName, Date dateOfBirth) {
         this.email = email;
         this.role = role;
         this.schoolClassName = schoolClassName;
-        this.yearOfBirth = yearOfBirth;
+        this.dateOfBirth = dateOfBirth;
     }
 }

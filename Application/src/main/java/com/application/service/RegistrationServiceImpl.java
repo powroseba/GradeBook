@@ -1,6 +1,8 @@
 package com.application.service;
 
+import com.application.exceptions.AuthModelValidationException;
 import com.application.exceptions.SchoolClassNotFound;
+import com.application.exceptions.UserAlreadyExistException;
 import com.application.tools.RandomStringGenerator;
 import com.domain.AuthModel;
 import com.entities.*;
@@ -8,9 +10,7 @@ import com.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.Charset;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -44,12 +44,20 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 
         String username = authModel.getEmail().split("@")[0];
+        if (username.length() < 6) {
+            throw new AuthModelValidationException("username size must be longer then 6, so the email address is to short!");
+        }
+
+        if (Optional.ofNullable(userModelRepository.findByEmail(authModel.getEmail())).isPresent()
+                || Optional.ofNullable(userModelRepository.findByUsername(username)).isPresent()) {
+            throw new UserAlreadyExistException();
+        }
         String password = RandomStringGenerator.generate(16);
         switch (authModel.getRole()) {
             case "TEACHER" : {
                 UserModel userModel = new UserModel(authModel.getEmail(), username, password, authModel.getRole());
-                Teacher teacher = new Teacher(authModel.getFirstName(), authModel.getLastName(), authModel.getYearOfBirth());
-                Exercise exercise = new Exercise(Exercises.valueOf(authModel.getExcercise()));
+                Teacher teacher = new Teacher(authModel.getFirstName(), authModel.getLastName(), authModel.getDateOfBirth());
+                Exercise exercise = new Exercise(Exercises.valueOf(authModel.getExercise()));
 
                 userModel = userModelRepository.save(userModel);
                 teacher = teacherRepository.save(teacher);
@@ -58,12 +66,13 @@ public class RegistrationServiceImpl implements RegistrationService {
                 userModel.setUserDetails(teacher);
                 teacher.setUserModel(userModel);
 
-                teacher.setExercise(exercise);
+                teacher.getExercises().add(exercise);
                 exercise.setTeacher(teacher);
 
                 userModelRepository.save(userModel);
                 teacherRepository.save(teacher);
                 exerciseRepository.save(exercise);
+                break;
 
             }
             case "STUDENT": {
@@ -71,15 +80,37 @@ public class RegistrationServiceImpl implements RegistrationService {
                 if (!Optional.ofNullable(schoolClass).isPresent()) {
                     throw new SchoolClassNotFound("School class with that name doesn't exist!");
                 }
-                //nowy model
-                //pobieramy mu przedmioty z klasy
-                //przydzielamy klase
-                //zapisuejemu userModelData
-                //do bazy
+                UserModel userModel = new UserModel(authModel.getEmail(), username, password, authModel.getRole());
+                Student student = new Student(authModel.getFirstName(), authModel.getLastName(), authModel.getDateOfBirth());
+
+                userModel = userModelRepository.save(userModel);
+                student = studentRepository.save(student);
+
+                userModel.setUserDetails(student);
+                student.setUserModel(userModel);
+
+                student.setSchoolClass(schoolClass);
+                schoolClass.getStudents().add(student);
+
+                for (Exercise e : schoolClass.getExercises()) {
+                    student.getExercises().add(e);
+                    e.getStudents().add(student);
+
+                    exerciseRepository.save(e);
+                }
+
+                userModelRepository.save(userModel);
+                studentRepository.save(student);
+                schoolClassRepository.save(schoolClass);
+
+                break;
             }
         }
-        //sporzadzamy email
+        String content = "<b>Hello " + username + "</b><br>";
+        content += "<br>Thanks for your registration in our service, try to login on your account.<br><p style=\"padding-left: 10px;\">" +
+                "username: " + username + "<br><p style=\"padding-left: 10px;\">password: " + password;
+        content += "<br><br><a href=\"localhost:8080/login\">Sign in here</a>";
 
-        emailService.sendSimpleEmail("puvac@send22u.info", "test", "content");
+        emailService.sendPlainText(authModel.getEmail(), "Thanks for registration in GradeBook", content);
     }
 }
