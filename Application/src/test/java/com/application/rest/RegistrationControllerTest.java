@@ -3,6 +3,9 @@ package com.application.rest;
 import com.application.Application;
 import com.application.ConvertJavaObjectToJson;
 import com.application.TokenGenerator;
+import com.application.exceptions.AuthModelValidationException;
+import com.application.exceptions.SchoolClassNotFound;
+import com.application.exceptions.UserAlreadyExistException;
 import com.application.service.RegistrationServiceImpl;
 import com.domain.AuthModel;
 import com.entities.UserRole;
@@ -41,7 +44,7 @@ public class RegistrationControllerTest {
 
     @Test
     public void signUp() throws Exception {
-        AuthModel authModel = new AuthModel("newmail@mail.com","Name","Surname",UserRole.ADMIN.name(), new Date());
+        AuthModel authModel = getAuthTestModel();
 
         ArgumentCaptor<AuthModel> arg = ArgumentCaptor.forClass(AuthModel.class);
 
@@ -54,4 +57,59 @@ public class RegistrationControllerTest {
         verify(registrationService, times(1)).signUp(arg.capture());
         verifyNoMoreInteractions(registrationService);
     }
+
+    @Test
+    public void signUpExpectBadRequest() throws Exception {
+        AuthModel authModel = getAuthTestModel();
+
+        ArgumentCaptor<AuthModel> arg = ArgumentCaptor.forClass(AuthModel.class);
+
+        doThrow(new AuthModelValidationException("")).when(registrationService).signUp(arg.capture());
+
+        mvc.perform(post("/auth").header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(ConvertJavaObjectToJson.asJsonString(authModel)))
+                .andExpect(status().isBadRequest());
+        verify(registrationService, times(1)).signUp(arg.capture());
+        verifyNoMoreInteractions(registrationService);
+    }
+
+    @Test
+    public void signUpExpectConflict() throws Exception {
+        AuthModel authModel = getAuthTestModel();
+
+        ArgumentCaptor<AuthModel> arg = ArgumentCaptor.forClass(AuthModel.class);
+
+        doThrow( new UserAlreadyExistException()).when(registrationService).signUp(arg.capture());
+
+        mvc.perform(post("/auth").header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(ConvertJavaObjectToJson.asJsonString(authModel)))
+                .andExpect(status().isConflict());
+        verify(registrationService, times(1)).signUp(arg.capture());
+        verifyNoMoreInteractions(registrationService);
+    }
+
+    @Test
+    public void signUpExpectNotFound() throws Exception {
+        AuthModel authModel = getAuthTestModel();
+
+        ArgumentCaptor<AuthModel> arg = ArgumentCaptor.forClass(AuthModel.class);
+
+        doThrow( new SchoolClassNotFound("")).when(registrationService).signUp(arg.capture());
+
+        mvc.perform(post("/auth").header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(ConvertJavaObjectToJson.asJsonString(authModel)))
+                .andExpect(status().isNotFound());
+        verify(registrationService, times(1)).signUp(arg.capture());
+        verifyNoMoreInteractions(registrationService);
+    }
+
+
+    public AuthModel getAuthTestModel() {
+       return new AuthModel("newmail@mail.com","Name","Surname",UserRole.ADMIN.name(), new Date());
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
@@ -131,5 +132,6 @@ public class UserModel implements UserDetails {
         }
         return null;
     }
+
 }
 

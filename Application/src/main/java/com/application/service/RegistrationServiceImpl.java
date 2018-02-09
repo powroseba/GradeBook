@@ -44,8 +44,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 
         String username = authModel.getEmail().split("@")[0];
-        if (username.length() < 6) {
-            throw new AuthModelValidationException("username size must be longer then 6, so the email address is to short!");
+        if (username.length() < 4) {
+            throw new AuthModelValidationException("username size must be longer then 4, so the email address is to short!");
         }
 
         if (Optional.ofNullable(userModelRepository.findByEmail(authModel.getEmail())).isPresent()
