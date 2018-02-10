@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -60,6 +61,14 @@ public class RegistrationServiceTest {
         registrationService.signUp(authModel);
 
         assertNotNull(authModel);
+        assertNotNull(userModel);
+        assertNotNull(teacher);
+        assertNotNull(exercise);
+
+        assertNotNull(userModelRepository.save(any(UserModel.class)));
+        assertNotNull(teacherRepository.save(any(Teacher.class)));
+        assertNotNull(exerciseRepository.save(any(Exercise.class)));
+
         assertThat(userModel.getUserModelDetails()).isEqualTo(teacher);
         assertThat(teacher.getUserModel()).isEqualTo(userModel);
 
@@ -78,6 +87,8 @@ public class RegistrationServiceTest {
         authModel.setEmail("a@mail.com");
 
         registrationService.signUp(authModel);
+
+        assertNotNull(authModel);
     }
 
     @Test(expected = UserAlreadyExistException.class)
@@ -85,6 +96,8 @@ public class RegistrationServiceTest {
         AuthModel authModel = (AuthModel) getModels(UserRole.TEACHER).get(0);
         when(userModelRepository.findByEmail(authModel.getEmail())).thenReturn((UserModel) getModels(UserRole.TEACHER).get(1));
         registrationService.signUp(authModel);
+
+        assertNotNull(userModelRepository.findByEmail(authModel.getEmail()));
     }
 
     @Test
@@ -103,6 +116,15 @@ public class RegistrationServiceTest {
         registrationService.signUp(authModel);
 
         assertNotNull(authModel);
+        assertNotNull(userModel);
+        assertNotNull(student);
+        assertNotNull(schoolClass);
+
+        assertNotNull(userModelRepository.save(any(UserModel.class)));
+        assertNotNull(studentRepository.save(any(Student.class)));
+        assertNotNull(schoolClassRepository.findByName(authModel.getSchoolClassName()));
+
+        assertThat(schoolClass.getExercises()).isNotEmpty();
         assertThat(userModel.getUserModelDetails()).isEqualTo(student);
         assertThat(student.getUserModel()).isEqualTo(userModel);
 
@@ -123,6 +145,8 @@ public class RegistrationServiceTest {
         AuthModel authModel = (AuthModel) getModels(UserRole.STUDENT).get(0);
         when(schoolClassRepository.findByName(authModel.getSchoolClassName())).thenReturn(null);
         registrationService.signUp(authModel);
+
+        assertNull(schoolClassRepository.findByName(authModel.getSchoolClassName()));
     }
 
     public List<Object> getModels(UserRole role) {

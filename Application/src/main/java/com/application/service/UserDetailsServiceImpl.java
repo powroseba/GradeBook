@@ -18,6 +18,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
     private UserModelRepository userModelRepository;
 
+    private TokenUsernameParserService tokenUsernameParserService = new TokenUsernameParserService();
+
     @Autowired
     public UserDetailsServiceImpl(UserModelRepository userModelRepository) {
         this.userModelRepository = userModelRepository;
@@ -25,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
     @Override
     public void changeEmail(HttpServletRequest request, UserData userData) {
-        String username = TokenUsernameParserService.parseUsername(request);
+        String username = tokenUsernameParserService.parseUsername(request);
         UserModel userModel = userModelRepository.findByUsername(username);
 
         if (!Optional.ofNullable(userModel).isPresent()) {
@@ -38,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
     @Override
     public void changePassword(HttpServletRequest request, UserData userData) {
-        String username = TokenUsernameParserService.parseUsername(request);
+        String username = tokenUsernameParserService.parseUsername(request);
         UserModel userModel = userModelRepository.findByUsername(username);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
