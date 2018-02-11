@@ -3,7 +3,7 @@ package com.application.unit.rest;
 import com.application.Application;
 import com.application.ConvertJavaObjectToJson;
 import com.application.TokenGenerator;
-import com.application.exceptions.AuthModelValidationException;
+import com.application.exceptions.AuthModelUsernameValidationException;
 import com.application.exceptions.SchoolClassNotFound;
 import com.application.exceptions.UserAlreadyExistException;
 import com.application.service.RegistrationServiceImpl;
@@ -69,12 +69,13 @@ public class RegistrationControllerTest {
 
         ArgumentCaptor<AuthModel> arg = ArgumentCaptor.forClass(AuthModel.class);
 
-        doThrow(new AuthModelValidationException("")).when(registrationService).signUp(arg.capture());
+        doThrow(new AuthModelUsernameValidationException()).when(registrationService).signUp(arg.capture());
 
         mvc.perform(post("/auth").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(ConvertJavaObjectToJson.asJsonString(authModel)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason("Username size must be longer then 4, so the email address is to short!"));
         verify(registrationService, times(1)).signUp(arg.capture());
         verifyNoMoreInteractions(registrationService);
     }
@@ -101,7 +102,7 @@ public class RegistrationControllerTest {
 
         ArgumentCaptor<AuthModel> arg = ArgumentCaptor.forClass(AuthModel.class);
 
-        doThrow( new SchoolClassNotFound("")).when(registrationService).signUp(arg.capture());
+        doThrow( new SchoolClassNotFound()).when(registrationService).signUp(arg.capture());
 
         mvc.perform(post("/auth").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)

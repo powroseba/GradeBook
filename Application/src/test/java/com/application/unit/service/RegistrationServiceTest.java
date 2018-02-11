@@ -1,6 +1,6 @@
 package com.application.unit.service;
 
-import com.application.exceptions.AuthModelValidationException;
+import com.application.exceptions.AuthModelUsernameValidationException;
 import com.application.exceptions.SchoolClassNotFound;
 import com.application.exceptions.UserAlreadyExistException;
 import com.application.service.EmailService;
@@ -83,7 +83,7 @@ public class RegistrationServiceTest {
         assertThat(authModel.getEmail()).isEqualTo(userModel.getEmail());
     }
 
-    @Test(expected = AuthModelValidationException.class)
+    @Test(expected = AuthModelUsernameValidationException.class)
     public void signUpExpectAuthModelValidationException() throws Exception {
         AuthModel authModel = (AuthModel) getModels(UserRole.TEACHER).get(0);
         authModel.setEmail("a@mail.com");

@@ -5,8 +5,4 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "School class was't found!")
 public class SchoolClassNotFound extends RuntimeException {
-
-    public SchoolClassNotFound(String s) {
-        super(s);
-    }
 }

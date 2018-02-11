@@ -1,6 +1,6 @@
 package com.application.service;
 
-import com.application.exceptions.AuthModelValidationException;
+import com.application.exceptions.AuthModelUsernameValidationException;
 import com.application.exceptions.SchoolClassNotFound;
 import com.application.exceptions.UserAlreadyExistException;
 import com.application.tools.RandomStringGenerator;
@@ -45,7 +45,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         String username = authModel.getEmail().split("@")[0];
         if (username.length() < 4) {
-            throw new AuthModelValidationException("username size must be longer then 4, so the email address is to short!");
+            throw new AuthModelUsernameValidationException();
         }
 
         if (Optional.ofNullable(userModelRepository.findByEmail(authModel.getEmail())).isPresent()
@@ -78,7 +78,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             case "STUDENT": {
                 SchoolClass schoolClass = schoolClassRepository.findByName(authModel.getSchoolClassName());
                 if (!Optional.ofNullable(schoolClass).isPresent()) {
-                    throw new SchoolClassNotFound("School class with that name doesn't exist!");
+                    throw new SchoolClassNotFound();
                 }
                 UserModel userModel = new UserModel(authModel.getEmail(), username, password, authModel.getRole());
                 Student student = new Student(authModel.getFirstName(), authModel.getLastName(), authModel.getDateOfBirth());
@@ -92,11 +92,13 @@ public class RegistrationServiceImpl implements RegistrationService {
                 student.setSchoolClass(schoolClass);
                 schoolClass.getStudents().add(student);
 
-                for (Exercise e : schoolClass.getExercises()) {
-                    student.getExercises().add(e);
-                    e.getStudents().add(student);
+                if (!schoolClass.getExercises().isEmpty()) {
+                    for (Exercise e : schoolClass.getExercises()) {
+                        student.getExercises().add(e);
+                        e.getStudents().add(student);
 
-                    exerciseRepository.save(e);
+                        exerciseRepository.save(e);
+                    }
                 }
 
                 userModelRepository.save(userModel);
