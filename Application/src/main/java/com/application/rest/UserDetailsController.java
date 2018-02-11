@@ -15,8 +15,6 @@ import javax.validation.Valid;
 @RequestMapping(value = "/user")
 public class UserDetailsController {
 
-//    zmiana email zmiana hasla
-
     private UserDetailsService userDetailsService;
 
     @Autowired

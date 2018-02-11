@@ -1,4 +1,4 @@
-package com.application.rest;
+package com.application.unit.rest;
 
 import com.application.Application;
 import com.application.ConvertJavaObjectToJson;
@@ -9,6 +9,7 @@ import com.application.exceptions.UserAlreadyExistException;
 import com.application.service.RegistrationServiceImpl;
 import com.domain.AuthModel;
 import com.entities.UserRole;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -38,8 +39,12 @@ public class RegistrationControllerTest {
     private RegistrationServiceImpl registrationService;
 
     private TokenGenerator tokenGenerator = new TokenGenerator();
+    private String token = "";
 
-    private String token = tokenGenerator.generate(1000, "username", UserRole.ADMIN);
+    @Before
+    public void generateToken() {
+        this.token = tokenGenerator.generate(10, "username", UserRole.ADMIN);
+    }
 
 
     @Test

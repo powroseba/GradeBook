@@ -1,8 +1,10 @@
-package com.application.service;
+package com.application.unit.service;
 
 import com.application.TokenGenerator;
-import com.application.exceptions.UncorrectPasswordsException;
+import com.application.exceptions.DifferentNewPasswordsException;
+import com.application.exceptions.UncorrectCurrentPasswordsException;
 import com.application.exceptions.UserNotFoundException;
+import com.application.service.UserDetailsServiceImpl;
 import com.domain.UserData;
 import com.entities.UserModel;
 import com.entities.UserRole;
@@ -101,9 +103,8 @@ public class UserDetailsServiceTest {
     }
 
     @Test
-    public void changePasswordExpectUncorrectedNewPassword() throws Exception {
-        expectedEx.expect(UncorrectPasswordsException.class);
-        expectedEx.expectMessage("passwords isn't the same!");
+    public void changePasswordExpectDifferentNewPasswords() throws Exception {
+        expectedEx.expect(DifferentNewPasswordsException.class);
 
         userData.setNewRepeatPassword(userData.getNewPassword() + "ups");
         when(userModelRepository.findByUsername(userData.getUsername())).thenReturn(new UserModel());
@@ -121,8 +122,7 @@ public class UserDetailsServiceTest {
     @Test
     public void changePasswordExpectUncorrectedCurrentPasswords() throws Exception {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        expectedEx.expect(UncorrectPasswordsException.class);
-        expectedEx.expectMessage("current password is invalid!");
+        expectedEx.expect(UncorrectCurrentPasswordsException.class);
 
         UserModel userModel = new UserModel("email@mail.com","email","differentPassword", UserRole.STUDENT.name());
         when(userModelRepository.findByUsername(userData.getUsername())).thenReturn(userModel);

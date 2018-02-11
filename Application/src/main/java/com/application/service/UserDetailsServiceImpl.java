@@ -1,6 +1,7 @@
 package com.application.service;
 
-import com.application.exceptions.UncorrectPasswordsException;
+import com.application.exceptions.DifferentNewPasswordsException;
+import com.application.exceptions.UncorrectCurrentPasswordsException;
 import com.application.exceptions.UserNotFoundException;
 import com.application.tools.TokenUsernameParserService;
 import com.domain.UserData;
@@ -49,9 +50,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         } else {
 
             if (!userData.getNewPassword().equals(userData.getNewRepeatPassword())) {
-                throw new UncorrectPasswordsException("passwords isn't the same!");
+                throw new DifferentNewPasswordsException();
             } else if (!encoder.matches(userData.getCurrentPassword(), userModel.getPassword())) {
-                throw new UncorrectPasswordsException("current password is invalid!");
+                throw new UncorrectCurrentPasswordsException();
             }
             else {
                 userModel.setPassword(userData.getNewPassword());

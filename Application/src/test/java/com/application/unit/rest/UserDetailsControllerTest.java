@@ -1,13 +1,15 @@
-package com.application.rest;
+package com.application.unit.rest;
 
 import com.application.Application;
 import com.application.ConvertJavaObjectToJson;
 import com.application.TokenGenerator;
-import com.application.exceptions.UncorrectPasswordsException;
+import com.application.exceptions.DifferentNewPasswordsException;
+import com.application.exceptions.UncorrectCurrentPasswordsException;
 import com.application.exceptions.UserNotFoundException;
 import com.application.service.UserDetailsServiceImpl;
 import com.domain.UserData;
 import com.entities.UserRole;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -36,8 +38,12 @@ public class UserDetailsControllerTest {
     private UserDetailsServiceImpl userDetailsService;
 
     private TokenGenerator tokenGenerator = new TokenGenerator();
+    private String token = "";
 
-    private String token = tokenGenerator.generate(1000, "username", UserRole.STUDENT);
+    @Before
+    public void generateToken() {
+        this.token = tokenGenerator.generate(10, "username", UserRole.STUDENT);
+    }
 
     @Test
     public void changeEmail() throws Exception {
@@ -105,17 +111,35 @@ public class UserDetailsControllerTest {
     }
 
     @Test
-    public void changePasswordExpectBadRequest() throws Exception {
+    public void changePasswordExpectBadRequestDifferentNewPasswords() throws Exception {
         UserData userData = new UserData();
 
         ArgumentCaptor<UserData> arg = ArgumentCaptor.forClass(UserData.class);
 
-        doThrow(new UncorrectPasswordsException("")).when(userDetailsService).changePassword(any(), arg.capture());
+        doThrow(new DifferentNewPasswordsException()).when(userDetailsService).changePassword(any(), arg.capture());
 
         mvc.perform(put("/user/pass").header("Authorization", token)
                     .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                     .content(ConvertJavaObjectToJson.asJsonString(userData)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason("New passwords isn't the same!"));
+        verify(userDetailsService, times(1)).changePassword(any(), arg.capture());
+        verifyNoMoreInteractions(userDetailsService);
+    }
+
+    @Test
+    public void changePasswordExpectBadRequestUncorrectCurrentPassword() throws Exception {
+        UserData userData = new UserData();
+
+        ArgumentCaptor<UserData> arg = ArgumentCaptor.forClass(UserData.class);
+
+        doThrow(new UncorrectCurrentPasswordsException()).when(userDetailsService).changePassword(any(), arg.capture());
+
+        mvc.perform(put("/user/pass").header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(ConvertJavaObjectToJson.asJsonString(userData)))
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason("Current password is incorrect!"));
         verify(userDetailsService, times(1)).changePassword(any(), arg.capture());
         verifyNoMoreInteractions(userDetailsService);
     }

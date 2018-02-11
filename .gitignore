@@ -38,3 +38,6 @@ target/
 *.iml
 *.ipr
 
+Application/data/
+
+

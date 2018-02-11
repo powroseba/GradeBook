@@ -1,8 +1,10 @@
-package com.application.service;
+package com.application.unit.service;
 
 import com.application.exceptions.AuthModelValidationException;
 import com.application.exceptions.SchoolClassNotFound;
 import com.application.exceptions.UserAlreadyExistException;
+import com.application.service.EmailService;
+import com.application.service.RegistrationServiceImpl;
 import com.domain.AuthModel;
 import com.entities.*;
 import com.repositories.*;
