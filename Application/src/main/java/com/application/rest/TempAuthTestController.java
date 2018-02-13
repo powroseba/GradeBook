@@ -1,4 +1,4 @@
-package com.application;
+package com.application.rest;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "/")
-public class Controller {
+public class TempAuthTestController {
 
     @GetMapping(value = "admin")
     @PreAuthorize("hasRole('ADMIN')")
