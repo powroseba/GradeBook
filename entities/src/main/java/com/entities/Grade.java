@@ -3,7 +3,6 @@ package com.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -40,7 +39,7 @@ public class Grade {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "EXCERCISE_ID")
+    @JoinColumn(name = "EXERCISE_ID")
     private Exercise exercise;
 
     public Grade(Date date, int grade, String description) {

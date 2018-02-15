@@ -42,7 +42,7 @@ public class Teacher extends UserModelDetails {
     private SchoolClass schoolClass;
 
     @OneToMany(targetEntity = Exercise.class, fetch = FetchType.EAGER, mappedBy = "teacher")
-    private Set<Exercise> exercises = new HashSet<>();;
+    private Set<Exercise> exercises = new HashSet<>();
 
     public Teacher(String firstName, String lastName, Date dateOfBirth) {
         this.firstName = firstName;
