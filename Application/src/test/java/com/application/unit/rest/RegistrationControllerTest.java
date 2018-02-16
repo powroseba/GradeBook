@@ -4,7 +4,7 @@ import com.application.Application;
 import com.application.ConvertJavaObjectToJson;
 import com.application.TokenGenerator;
 import com.application.exceptions.AuthModelUsernameValidationException;
-import com.application.exceptions.SchoolClassNotFound;
+import com.application.exceptions.notfound.SchoolClassNotFound;
 import com.application.exceptions.UserAlreadyExistException;
 import com.application.service.RegistrationServiceImpl;
 import com.domain.AuthModel;

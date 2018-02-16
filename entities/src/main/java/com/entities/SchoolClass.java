@@ -1,5 +1,7 @@
 package com.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +24,7 @@ public class SchoolClass {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "schoolClass", targetEntity = Teacher.class)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Teacher tutor;
 
     @NotNull
@@ -32,9 +35,11 @@ public class SchoolClass {
     private Profile profile;
 
     @OneToMany(targetEntity = Exercise.class, fetch = FetchType.EAGER, mappedBy = "schoolClass")
+    @JsonIgnore
     private Set<Exercise> exercises = new HashSet<>();
 
     @OneToMany(targetEntity = Student.class, fetch = FetchType.EAGER, mappedBy = "schoolClass")
+    @JsonIgnore
     private Set<Student> students = new HashSet<>();
 
     public SchoolClass(String name, Profile profile) {

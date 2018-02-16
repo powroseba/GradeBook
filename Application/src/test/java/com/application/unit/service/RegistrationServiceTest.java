@@ -1,7 +1,7 @@
 package com.application.unit.service;
 
 import com.application.exceptions.AuthModelUsernameValidationException;
-import com.application.exceptions.SchoolClassNotFound;
+import com.application.exceptions.notfound.SchoolClassNotFound;
 import com.application.exceptions.UserAlreadyExistException;
 import com.application.service.EmailService;
 import com.application.service.RegistrationServiceImpl;

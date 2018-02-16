@@ -2,20 +2,19 @@ package com.domain;
 
 
 import com.entities.Exercises;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class ExerciseAndGrades {
 
     private Exercises exercise;
 
-    private List<Integer> grades;
+    private List<Integer> grades = new ArrayList<>();
 }

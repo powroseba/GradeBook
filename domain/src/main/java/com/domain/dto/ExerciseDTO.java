@@ -1,11 +1,14 @@
 package com.domain.dto;
 
 import com.entities.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,16 +19,18 @@ public class ExerciseDTO {
 
     private Long id;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Teacher teacher;
 
+    @Enumerated(EnumType.STRING)
     private Exercises nameOfExercise;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Grade> grades = new HashSet<>();
 
     private SchoolClass schoolClass;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Student> students = new HashSet<>();
 
     public ExerciseDTO(Long id, Teacher teacher, Exercises nameOfExercise, Set<Grade> grades,

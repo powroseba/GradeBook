@@ -1,5 +1,7 @@
 package com.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,12 +38,15 @@ public class Teacher extends UserModelDetails {
 
     @OneToOne(mappedBy = "teacher", targetEntity = UserModel.class)
     @JoinColumn(nullable = true, name = "USER_ID")
+    @JsonIgnore
     private UserModel userModel;
 
     @OneToOne
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private SchoolClass schoolClass;
 
     @OneToMany(targetEntity = Exercise.class, fetch = FetchType.EAGER, mappedBy = "teacher")
+    @JsonIgnore
     private Set<Exercise> exercises = new HashSet<>();
 
     public Teacher(String firstName, String lastName, Date dateOfBirth) {

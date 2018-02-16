@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,16 +21,18 @@ public class SchoolClassDTO {
 
     private Long id;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Teacher tutor;
 
+    @NotNull
+    @Size(min = 1, max = 15)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private Profile profile;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<Exercise> exercises = new HashSet<>();
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<Student> students = new HashSet<>();
 
     public SchoolClassDTO(Long id, Teacher tutor, String name, Profile profile, Set<Exercise> exercises, Set<Student> students) {

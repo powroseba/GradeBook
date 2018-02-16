@@ -1,6 +1,7 @@
 package com.application.service;
 
 import com.application.tools.TokenUsernameParserService;
+import com.domain.dto.ExerciseDTO;
 import com.entities.Exercise;
 import com.entities.Teacher;
 import com.repositories.ExerciseRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,9 +28,19 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public List<Exercise> getTeacherExercises(HttpServletRequest request) {
+    public List<ExerciseDTO> getTeacherExercises(HttpServletRequest request) {
         String userName = tokenUsernameParserService.parseUsername(request);
         Teacher teacher = (Teacher)userModelRepository.findByUsername(userName).getUserModelDetails();
-        return exerciseRepository.findByTeacher(teacher);
+        List<ExerciseDTO> exerciseDTOList = new ArrayList<>();
+        for (Exercise e : exerciseRepository.findByTeacher(teacher)) {
+            ExerciseDTO exerciseDTO = ExerciseDTO.convert(e);
+            exerciseDTO.setTeacher(null);
+            exerciseDTO.getSchoolClass().setTutor(null);
+            exerciseDTO.setGrades(null);
+            exerciseDTO.getStudents().clear();
+
+            exerciseDTOList.add(exerciseDTO);
+        }
+        return exerciseDTOList;
     }
 }

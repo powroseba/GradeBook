@@ -1,5 +1,6 @@
 package com.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,10 +37,12 @@ public class Grade {
 
     @ManyToOne
     @JoinColumn(name = "STUDENT_ID")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Student student;
 
     @ManyToOne
     @JoinColumn(name = "EXERCISE_ID")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Exercise exercise;
 
     public Grade(Date date, int grade, String description) {

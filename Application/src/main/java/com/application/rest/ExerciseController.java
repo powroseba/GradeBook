@@ -1,8 +1,9 @@
 package com.application.rest;
 
 import com.application.service.ExerciseService;
-import com.entities.Exercise;
+import com.domain.dto.ExerciseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,8 @@ public class ExerciseController {
     }
 
     @GetMapping(value = "/teacher")
-    public List<Exercise> getTeacherExercises(HttpServletRequest request) {
+    @PreAuthorize("hasRole('TEACHER')")
+    public List<ExerciseDTO> getTeacherExercises(HttpServletRequest request) {
         return exerciseService.getTeacherExercises(request);
     }
 }

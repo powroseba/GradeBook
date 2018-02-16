@@ -5,7 +5,7 @@ import com.application.ConvertJavaObjectToJson;
 import com.application.TokenGenerator;
 import com.application.exceptions.DifferentNewPasswordsException;
 import com.application.exceptions.UncorrectCurrentPasswordsException;
-import com.application.exceptions.UserNotFoundException;
+import com.application.exceptions.notfound.UserNotFoundException;
 import com.application.service.UserDetailsServiceImpl;
 import com.domain.UserData;
 import com.entities.UserRole;
