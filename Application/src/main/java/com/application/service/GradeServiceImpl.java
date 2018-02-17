@@ -19,6 +19,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,32 +45,36 @@ public class GradeServiceImpl implements GradeService{
     }
 
     @Override
-    public List<ExerciseAndGrades> findGradesForStudent(HttpServletRequest request) {
+    public ExerciseAndGrades findGradesForStudent(HttpServletRequest request) {
         String username = tokenUsernameParserService.parseUsername(request);
         UserModel userModel = userModelRepository.findByUsername(username);
         Long id = ((Student)userModel.getUserModelDetails()).getId();
-        List<ExerciseAndGrades> exerciseAndGradesList = new ArrayList<>();
+        ExerciseAndGrades exerciseAndGrades= new ExerciseAndGrades(userModel.getEmail());
 
 
         Query query = em.createNativeQuery("SELECT exercise.name_of_exercise, grade.grade FROM grade inner join exercise on (grade.exercise_id = exercise.id) where grade.student_id = ?");
         List result = query.setParameter(1, id).getResultList();
         for(Object p:result) {
             Object[] fields = (Object[])p;
-            boolean exerciseExist = false;
-            for (ExerciseAndGrades e : exerciseAndGradesList) {
-                if (e.getExercise().equals(Exercises.valueOf(fields[0].toString()))) {
-                    e.getGrades().add((Integer) fields[1]);
-                    exerciseExist = true;
-                }
-            }
-            if (!exerciseExist) {
-                ExerciseAndGrades exerciseAndGrades = new ExerciseAndGrades();
-                exerciseAndGrades.setExercise(Exercises.valueOf(fields[0].toString()));
-                exerciseAndGrades.getGrades().add((Integer)fields[1]);
-                exerciseAndGradesList.add(exerciseAndGrades);
+
+            Exercises key = Exercises.valueOf(fields[0].toString());
+            Integer grade = (Integer) fields[1];
+
+            if (exerciseAndGrades.getExerciseAndGradeList().containsKey(key)) {
+                ArrayList<Integer> newGrades = exerciseAndGrades.getExerciseAndGradeList().
+                        get(key);
+
+                newGrades.add(grade);
+
+                exerciseAndGrades.getExerciseAndGradeList().put(key, newGrades);
+            } else {
+                ArrayList<Integer> gradeList = new ArrayList<Integer>();
+                gradeList.add(grade);
+                exerciseAndGrades.getExerciseAndGradeList().
+                        put(key, gradeList);
             }
         }
-        return exerciseAndGradesList;
+        return exerciseAndGrades;
     }
 
     @Override

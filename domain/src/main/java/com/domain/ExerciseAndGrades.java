@@ -5,16 +5,21 @@ import com.entities.Exercises;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class ExerciseAndGrades {
 
-    private Exercises exercise;
+    private HashMap<Exercises, ArrayList<Integer>> exerciseAndGradeList;
 
-    private List<Integer> grades = new ArrayList<>();
+    private String email;
+
+    public ExerciseAndGrades(String email) {
+        this.exerciseAndGradeList = new HashMap<Exercises, ArrayList<Integer>>();
+        this.email = email;
+    }
 }

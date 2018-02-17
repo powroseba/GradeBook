@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/grades")
@@ -24,7 +23,7 @@ public class GradeController {
 
     @GetMapping
     @PreAuthorize("hasRole('STUDENT')")
-    public List<ExerciseAndGrades> getMyGrades(HttpServletRequest request) {
+    public ExerciseAndGrades getMyGrades(HttpServletRequest request) {
         return gradeService.findGradesForStudent(request);
     }
 
