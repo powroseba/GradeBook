@@ -1,6 +1,7 @@
 package com.application.rest;
 
 import com.application.service.GradeService;
+import com.application.service.implementations.RabbitProducer;
 import com.domain.ExerciseAndGrades;
 import com.entities.Exercises;
 import com.entities.Grade;
@@ -16,9 +17,12 @@ public class GradeController {
 
     private GradeService gradeService;
 
+    private RabbitProducer rabbitProducer;
+
     @Autowired
-    public GradeController(GradeService gradeService) {
+    public GradeController(GradeService gradeService, RabbitProducer rabbitProducer) {
         this.gradeService = gradeService;
+        this.rabbitProducer = rabbitProducer;
     }
 
     @GetMapping
@@ -33,5 +37,11 @@ public class GradeController {
                          @RequestParam("exercise") Exercises exercises,
                          @RequestBody Grade grade) {
         gradeService.addGrade(request, studentId, exercises, grade);
+    }
+
+    @PostMapping(value = "/pdf")
+    @PreAuthorize("hasRole('STUDENT')")
+    public void sendPDFWithMyGrades(HttpServletRequest request) {
+        rabbitProducer.sendGrades(request);
     }
 }

@@ -11,7 +11,8 @@
 		<module>entities</module>
         <module>Application</module>
 		<module>domain</module>
-	</modules>
+        <module>pdfsender</module>
+    </modules>
 	<packaging>pom</packaging>
 
 	<name>grades-book-application</name>
@@ -79,6 +80,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 			<version>1.5.10.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
 		</dependency>
 
 	</dependencies>

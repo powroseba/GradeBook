@@ -1,8 +1,9 @@
-package com.application.service;
+package com.application.service.implementations;
 
 import com.application.exceptions.AuthModelUsernameValidationException;
 import com.application.exceptions.notfound.SchoolClassNotFound;
 import com.application.exceptions.UserAlreadyExistException;
+import com.application.service.RegistrationService;
 import com.application.tools.RandomStringGenerator;
 import com.domain.AuthModel;
 import com.entities.*;

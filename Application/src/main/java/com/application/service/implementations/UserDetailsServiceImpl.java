@@ -1,8 +1,9 @@
-package com.application.service;
+package com.application.service.implementations;
 
 import com.application.exceptions.DifferentNewPasswordsException;
 import com.application.exceptions.UncorrectCurrentPasswordsException;
 import com.application.exceptions.notfound.UserNotFoundException;
+import com.application.service.UserDetailsService;
 import com.application.tools.TokenUsernameParserService;
 import com.domain.UserData;
 import com.entities.UserModel;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService{
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private UserModelRepository userModelRepository;
 

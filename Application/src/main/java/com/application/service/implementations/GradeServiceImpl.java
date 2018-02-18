@@ -1,8 +1,9 @@
-package com.application.service;
+package com.application.service.implementations;
 
 import com.application.exceptions.notfound.ExerciseNotFoundException;
 import com.application.exceptions.notfound.StudentNotFoundException;
 import com.application.exceptions.notfound.TeacherNotFoundException;
+import com.application.service.GradeService;
 import com.application.tools.TokenUsernameParserService;
 import com.domain.ExerciseAndGrades;
 import com.entities.*;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class GradeServiceImpl implements GradeService{
+public class GradeServiceImpl implements GradeService {
 
     @PersistenceContext
     private EntityManager em;

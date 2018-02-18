@@ -1,5 +1,6 @@
-package com.application.service;
+package com.application.service.implementations;
 
+import com.application.service.ExerciseService;
 import com.application.tools.TokenUsernameParserService;
 import com.domain.dto.ExerciseDTO;
 import com.entities.Exercise;
