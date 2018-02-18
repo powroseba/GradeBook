@@ -38,7 +38,7 @@ public class RabbitProducer {
     /**
      * This post construct is use to auto generate queue, exchange and key in rabbitMQ
      */
-//    @PostConstruct
+    @PostConstruct
     public void generateConfig() {
         amqpTemplate.convertAndSend(exchange, routingKey);
     }
