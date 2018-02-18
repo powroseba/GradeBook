@@ -35,26 +35,21 @@ public class EmailService {
 
     public void sendMailWithAttachment(MailProperties mailProperties, byte[] pdf) {
         try {
-            //construct the text body part
             MimeBodyPart textBodyPart = new MimeBodyPart();
             textBodyPart.setText(mailProperties.getContent());
 
-            //construct the pdf body part
             DataSource dataSource = new ByteArrayDataSource(pdf, "application/pdf");
             MimeBodyPart pdfBodyPart = new MimeBodyPart();
             pdfBodyPart.setDataHandler(new DataHandler(dataSource));
-            pdfBodyPart.setFileName("test.pdf");
+            pdfBodyPart.setFileName("grade.pdf");
 
-            //construct the mime multi part
             MimeMultipart mimeMultipart = new MimeMultipart();
             mimeMultipart.addBodyPart(textBodyPart);
             mimeMultipart.addBodyPart(pdfBodyPart);
 
-            //create the sender/recipient addresses
             InternetAddress iaSender = new InternetAddress(myMail);
             InternetAddress iaRecipient = new InternetAddress(mailProperties.getTo());
 
-            //construct the mime message
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             mimeMessage.setSender(iaSender);
             mimeMessage.setSubject(mailProperties.getSubject());
@@ -62,7 +57,7 @@ public class EmailService {
             mimeMessage.setContent(mimeMultipart);
 
             javaMailSender.send(mimeMessage);
-//            LOGGER.info("Send email '{}' to: {}", title, to);
+            LOGGER.info("Send email '{}' to: {}", mailProperties.getSubject(), mailProperties.getTo());
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
