@@ -19,6 +19,5 @@ public class TokenGenerator {
             }
         };
         return TokenBuilder.createToken(username, time, roles);
-
     }
 }

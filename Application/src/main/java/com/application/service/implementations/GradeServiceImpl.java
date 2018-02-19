@@ -1,8 +1,6 @@
 package com.application.service.implementations;
 
-import com.application.exceptions.notfound.ExerciseNotFoundException;
-import com.application.exceptions.notfound.StudentNotFoundException;
-import com.application.exceptions.notfound.TeacherNotFoundException;
+import com.application.exceptions.notfound.*;
 import com.application.service.GradeService;
 import com.application.tools.TokenUsernameParserService;
 import com.domain.ExerciseAndGrades;
@@ -49,12 +47,20 @@ public class GradeServiceImpl implements GradeService {
     public ExerciseAndGrades findGradesForStudent(HttpServletRequest request) {
         String username = tokenUsernameParserService.parseUsername(request);
         UserModel userModel = userModelRepository.findByUsername(username);
+
+        if (!Optional.ofNullable(userModel).isPresent()) {
+            throw new UserNotFoundException();
+        }
         Long id = ((Student)userModel.getUserModelDetails()).getId();
-        ExerciseAndGrades exerciseAndGrades= new ExerciseAndGrades(userModel.getEmail());
+        ExerciseAndGrades exerciseAndGrades = new ExerciseAndGrades(userModel.getEmail());
 
 
         Query query = em.createNativeQuery("SELECT exercise.name_of_exercise, grade.grade FROM grade inner join exercise on (grade.exercise_id = exercise.id) where grade.student_id = ?");
         List result = query.setParameter(1, id).getResultList();
+
+        if (result.isEmpty()) {
+            throw new GradeNotFoundException();
+        }
         for(Object p:result) {
             Object[] fields = (Object[])p;
 

@@ -1,5 +1,6 @@
 package com.application.service.implementations;
 
+import com.application.exceptions.notfound.TeacherNotFoundException;
 import com.application.service.ExerciseService;
 import com.application.tools.TokenUsernameParserService;
 import com.domain.dto.ExerciseDTO;
@@ -7,12 +8,14 @@ import com.entities.Exercise;
 import com.entities.Teacher;
 import com.repositories.ExerciseRepository;
 import com.repositories.UserModelRepository;
+import jdk.internal.org.objectweb.asm.Opcodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
@@ -32,6 +35,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     public List<ExerciseDTO> getTeacherExercises(HttpServletRequest request) {
         String userName = tokenUsernameParserService.parseUsername(request);
         Teacher teacher = (Teacher)userModelRepository.findByUsername(userName).getUserModelDetails();
+
+        if (!Optional.ofNullable(teacher).isPresent()) {
+            throw new TeacherNotFoundException();
+        }
+
         List<ExerciseDTO> exerciseDTOList = new ArrayList<>();
         for (Exercise e : exerciseRepository.findByTeacher(teacher)) {
             ExerciseDTO exerciseDTO = ExerciseDTO.convert(e);

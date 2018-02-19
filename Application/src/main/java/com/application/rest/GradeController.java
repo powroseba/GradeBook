@@ -6,6 +6,7 @@ import com.domain.ExerciseAndGrades;
 import com.entities.Exercises;
 import com.entities.Grade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class GradeController {
 
     @PostMapping(value = "/add")
     @PreAuthorize("hasRole('TEACHER')")
+    @ResponseStatus(code = HttpStatus.CREATED)
     public void addGrade(HttpServletRequest request, @RequestParam("studentId") Long studentId,
                          @RequestParam("exercise") Exercises exercises,
                          @RequestBody Grade grade) {
