@@ -1,5 +1,6 @@
 package com.application.service.implementations;
 
+import com.application.exceptions.notfound.ExerciseNotFoundException;
 import com.application.exceptions.notfound.TeacherNotFoundException;
 import com.application.service.ExerciseService;
 import com.application.tools.TokenUsernameParserService;
@@ -40,8 +41,13 @@ public class ExerciseServiceImpl implements ExerciseService {
             throw new TeacherNotFoundException();
         }
 
+        List<Exercise> exerciseList = exerciseRepository.findByTeacher(teacher);
+        if ((!Optional.ofNullable(exerciseList).isPresent()) || exerciseList.isEmpty()) {
+            throw new ExerciseNotFoundException();
+        }
+
         List<ExerciseDTO> exerciseDTOList = new ArrayList<>();
-        for (Exercise e : exerciseRepository.findByTeacher(teacher)) {
+        for (Exercise e : exerciseList) {
             ExerciseDTO exerciseDTO = ExerciseDTO.convert(e);
             exerciseDTO.setTeacher(null);
             exerciseDTO.getSchoolClass().setTutor(null);
