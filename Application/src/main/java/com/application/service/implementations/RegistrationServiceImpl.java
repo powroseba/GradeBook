@@ -6,6 +6,7 @@ import com.application.exceptions.UserAlreadyExistException;
 import com.application.service.RegistrationService;
 import com.application.tools.RandomStringGenerator;
 import com.domain.AuthModel;
+import com.domain.MailProperties;
 import com.entities.*;
 import com.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,6 +115,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 "username: " + username + "<br><p style=\"padding-left: 10px;\">password: " + password;
         content += "<br><br><a href=\"localhost:8080/login\">Sign in here</a>";
 
-        emailService.sendPlainText(authModel.getEmail(), "Thanks for registration in GradeBook", content);
+        MailProperties mailProperties = new MailProperties(authModel.getEmail(), "Thanks for registration in GradeBook", content);
+        emailService.sendPlainText(mailProperties);
     }
 }
