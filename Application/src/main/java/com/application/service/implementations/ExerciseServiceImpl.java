@@ -6,6 +6,7 @@ import com.application.service.ExerciseService;
 import com.application.tools.TokenUsernameParserService;
 import com.domain.dto.ExerciseDTO;
 import com.entities.Exercise;
+import com.entities.Exercises;
 import com.entities.Teacher;
 import com.repositories.ExerciseRepository;
 import com.repositories.UserModelRepository;
@@ -14,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
