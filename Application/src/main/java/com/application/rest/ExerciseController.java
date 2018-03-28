@@ -35,9 +35,10 @@ public class ExerciseController {
         return exerciseService.getStudentExercises(request);
     }
 
-    @GetMapping(value = "/")
+
+    @GetMapping
     @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ExerciseDTO getExercie(@RequestParam("exerciseId") Long id) {
+    public ExerciseDTO getExercise(@RequestParam("exerciseId") Long id) {
         return exerciseService.getExercise(id);
     }
 

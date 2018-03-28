@@ -14,4 +14,6 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 
     Optional<Exercise> findByTeacherAndSchoolClassAndNameOfExerciseAndStudentsIsContaining(Teacher teacher, SchoolClass schoolClass,
                                                                                            Exercises nameOfExercise, Student student);
+
+    List<Exercise> findByStudents_Id(Long id);
 }
