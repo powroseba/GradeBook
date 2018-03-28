@@ -1,14 +1,17 @@
 package com.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "TEACHER")
@@ -22,30 +25,33 @@ public class Teacher extends UserModelDetails {
     private Long id;
 
     @NotNull
-    @Size(min = 3)
+    @Size(min = 3, max = 15)
     private String firstName;
 
     @NotNull
-    @Size(min = 3)
+    @Size(min = 3, max = 20)
     private String lastName;
 
     @NotNull
     @Temporal(TemporalType.DATE)
-    private Date yearOfBirth;
+    private Date dateOfBirth;
 
     @OneToOne(mappedBy = "teacher", targetEntity = UserModel.class)
     @JoinColumn(nullable = true, name = "USER_ID")
+    @JsonIgnore
     private UserModel userModel;
 
     @OneToOne
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private SchoolClass schoolClass;
 
-    @OneToOne
-    private Exercise exercise;
+    @OneToMany(targetEntity = Exercise.class, fetch = FetchType.EAGER, mappedBy = "teacher")
+    @JsonIgnore
+    private Set<Exercise> exercises = new HashSet<>();
 
-    public Teacher(String firstName, String lastName, Date yearOfBirth) {
+    public Teacher(String firstName, String lastName, Date dateOfBirth) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.yearOfBirth = yearOfBirth;
+        this.dateOfBirth = dateOfBirth;
     }
 }

@@ -25,68 +25,75 @@ public class DBSeeder {
     @Autowired
     private GradeRepository gradeRepository;
 
-    @PostConstruct
+//    @PostConstruct
     public void seed() throws ParseException {
-        SchoolClass schoolClassOne = new SchoolClass("1 A", Profile.CHEMISTRY_AND_BIOLOGY);
-        SchoolClass schoolClassTwo = new SchoolClass("2 B", Profile.MATHEMATICS);
+        SchoolClass schoolClassChemBiol = new SchoolClass("1 A", Profile.CHEMISTRY_AND_BIOLOGY);
+        SchoolClass schoolClassMath = new SchoolClass("2 B", Profile.MATHEMATICS);
 
         UserModel userModelOne = new UserModel("teacherone@mail.com","teacherone","teacherpass", UserRole.TEACHER.name());
         UserModel userModelTwo = new UserModel("teachertwo@mail.com","teachertwo", "teacherpass",UserRole.TEACHER.name());
 
 
-        Teacher teacherOne = new Teacher("Adam","Żyła",
+        Teacher teacherChem = new Teacher("Adam","Żyła",
                 getDateInFormat(1967, 2, 17));
-        Teacher teacherTwo = new Teacher("Janina","Kula",
+        Teacher teacherMath = new Teacher("Janina","Kula",
                 getDateInFormat(1973, 9, 1));
 
-        Exercise exerciseOne = new Exercise(Exercises.CHEMY);
-        Exercise exerciseTwo = new Exercise(Exercises.MATH);
+        Exercise exerciseChem = new Exercise(Exercises.CHEMY);
+        Exercise exerciseMathOne = new Exercise(Exercises.MATH);
+        Exercise exerciseMathTwo = new Exercise(Exercises.MATH);
 
         //SAVING
-        schoolClassOne = schoolClassRepository.save(schoolClassOne);
-        schoolClassTwo = schoolClassRepository.save(schoolClassTwo);
+        schoolClassChemBiol = schoolClassRepository.save(schoolClassChemBiol);
+        schoolClassMath = schoolClassRepository.save(schoolClassMath);
 
         userModelOne = userModelRepository.save(userModelOne);
         userModelTwo = userModelRepository.save(userModelTwo);
 
-        teacherOne = teacherRepository.save(teacherOne);
-        teacherTwo = teacherRepository.save(teacherTwo);
+        teacherChem = teacherRepository.save(teacherChem);
+        teacherMath = teacherRepository.save(teacherMath);
 
-        exerciseOne = exerciseRepository.save(exerciseOne);
-        exerciseTwo = exerciseRepository.save(exerciseTwo);
+        exerciseChem = exerciseRepository.save(exerciseChem);
+        exerciseMathOne = exerciseRepository.save(exerciseMathOne);
+        exerciseMathTwo = exerciseRepository.save(exerciseMathTwo);
 
         //RELATIONS
-        userModelOne.setUserDetails(teacherOne);
-        userModelTwo.setUserDetails(teacherTwo);
-        teacherOne.setUserModel(userModelOne);
-        teacherTwo.setUserModel(userModelTwo);
+        userModelOne.setUserDetails(teacherChem);
+        userModelTwo.setUserDetails(teacherMath);
+        teacherChem.setUserModel(userModelOne);
+        teacherMath.setUserModel(userModelTwo);
 
-        teacherOne.setExercise(exerciseOne);
-        teacherTwo.setExercise(exerciseTwo);
-        exerciseOne.setTeacher(teacherOne);
-        exerciseTwo.setTeacher(teacherTwo);
+        teacherChem.getExercises().add(exerciseChem);
+        teacherMath.getExercises().add(exerciseMathOne);
+        teacherMath.getExercises().add(exerciseMathTwo);
+        exerciseChem.setTeacher(teacherChem);
+        exerciseMathOne.setTeacher(teacherMath);
+        exerciseMathTwo.setTeacher(teacherMath);
 
-        teacherOne.setSchoolClass(schoolClassOne);
-        teacherTwo.setSchoolClass(schoolClassTwo);
-        schoolClassOne.setTutor(teacherOne);
-        schoolClassTwo.setTutor(teacherTwo);
+        teacherChem.setSchoolClass(schoolClassChemBiol);
+        teacherMath.setSchoolClass(schoolClassMath);
+        schoolClassChemBiol.setTutor(teacherChem);
+        schoolClassMath.setTutor(teacherMath);
 
-        exerciseOne.setSchoolClass(schoolClassOne);
-        exerciseTwo.setSchoolClass(schoolClassTwo);
-        schoolClassOne.getExercises().add(exerciseOne);
-        schoolClassTwo.getExercises().add(exerciseTwo);
+        exerciseChem.setSchoolClass(schoolClassChemBiol);
+        exerciseMathTwo.setSchoolClass(schoolClassChemBiol);
+        exerciseMathOne.setSchoolClass(schoolClassMath);
+        schoolClassChemBiol.getExercises().add(exerciseChem);
+        schoolClassChemBiol.getExercises().add(exerciseMathTwo);
+        schoolClassMath.getExercises().add(exerciseMathOne);
 
-        schoolClassOne = schoolClassRepository.save(schoolClassOne);
-        schoolClassTwo = schoolClassRepository.save(schoolClassTwo);
+        schoolClassChemBiol = schoolClassRepository.save(schoolClassChemBiol);
+        schoolClassMath = schoolClassRepository.save(schoolClassMath);
 
         userModelRepository.save(userModelOne);
         userModelRepository.save(userModelTwo);
 
-        exerciseOne = exerciseRepository.save(exerciseOne);
-        exerciseTwo = exerciseRepository.save(exerciseTwo);
+        exerciseChem = exerciseRepository.save(exerciseChem);
+        exerciseMathOne = exerciseRepository.save(exerciseMathOne);
+        exerciseMathTwo = exerciseRepository.save(exerciseMathTwo);
 
-        teacherRepository.save(teacherOne);
-        teacherRepository.save(teacherTwo);
+        teacherRepository.save(teacherChem);
+        teacherRepository.save(teacherMath);
 
         //CREATING STUDENT TO CLASS ONE
         UserModel studentOneUserModel = new UserModel(
@@ -105,6 +112,10 @@ public class DBSeeder {
         Grade gradeTwo = new Grade(getDateInFormat(2018, 1,21), 4, "Sprawdzian");
         Grade gradeThree = new Grade(getDateInFormat(2018, 1,21), 3, "Sprawdzian");
 
+        Grade gradeMathOne = new Grade(getDateInFormat(2018, 1,30), 2, "Kartkowka");
+        Grade gradeMathTwo = new Grade(getDateInFormat(2018, 1,30), 4, "Kartkowka");
+        Grade gradeMathThree = new Grade(getDateInFormat(2018, 1,30), 3, "Kartkowka");
+
         //SAVING
         studentOneUserModel = userModelRepository.save(studentOneUserModel);
         studentTwoUserModel = userModelRepository.save(studentTwoUserModel);
@@ -118,6 +129,10 @@ public class DBSeeder {
         gradeTwo = gradeRepository.save(gradeTwo);
         gradeThree = gradeRepository.save(gradeThree);
 
+        gradeMathOne = gradeRepository.save(gradeMathOne);
+        gradeMathTwo = gradeRepository.save(gradeMathTwo);
+        gradeMathThree = gradeRepository.save(gradeMathThree);
+
         //RELATIONS
         studentOneUserModel.setUserDetails(studentOne);
         studentOne.setUserModel(studentOneUserModel);
@@ -126,33 +141,57 @@ public class DBSeeder {
         studentThreeUserModel.setUserDetails(studentThree);
         studentThree.setUserModel(studentThreeUserModel);
 
-        studentOne.setSchoolClass(schoolClassOne);
-        schoolClassOne.getStudents().add(studentOne);
-        studentTwo.setSchoolClass(schoolClassOne);
-        schoolClassOne.getStudents().add(studentTwo);
-        studentThree.setSchoolClass(schoolClassOne);
-        schoolClassOne.getStudents().add(studentThree);
+        studentOne.setSchoolClass(schoolClassChemBiol);
+        schoolClassChemBiol.getStudents().add(studentOne);
+        studentTwo.setSchoolClass(schoolClassChemBiol);
+        schoolClassChemBiol.getStudents().add(studentTwo);
+        studentThree.setSchoolClass(schoolClassChemBiol);
+        schoolClassChemBiol.getStudents().add(studentThree);
 
-        studentOne.getExercises().add(exerciseOne);
-        exerciseOne.getStudents().add(studentOne);
-        studentTwo.getExercises().add(exerciseOne);
-        exerciseOne.getStudents().add(studentTwo);
-        studentThree.getExercises().add(exerciseOne);
-        exerciseOne.getStudents().add(studentThree);
+        studentOne.getExercises().add(exerciseChem);
+        studentOne.getExercises().add(exerciseMathTwo);
+        exerciseChem.getStudents().add(studentOne);
+        exerciseMathTwo.getStudents().add(studentOne);
+
+        studentTwo.getExercises().add(exerciseChem);
+        studentTwo.getExercises().add(exerciseMathTwo);
+        exerciseChem.getStudents().add(studentTwo);
+        exerciseMathTwo.getStudents().add(studentTwo);
+
+        studentThree.getExercises().add(exerciseChem);
+        studentThree.getExercises().add(exerciseMathTwo);
+        exerciseChem.getStudents().add(studentThree);
+        exerciseMathTwo.getStudents().add(studentThree);
 
         studentOne.getGrades().add(gradeOne);
+        studentOne.getGrades().add(gradeMathOne);
         gradeOne.setStudent(studentOne);
-        studentTwo.getGrades().add(gradeTwo);
-        gradeTwo.setStudent(studentTwo);
-        studentThree.getGrades().add(gradeThree);
-        gradeThree.setStudent(studentThree);
+        gradeMathOne.setStudent(studentOne);
 
-        gradeOne.setExercise(exerciseOne);
-        exerciseOne.getGrades().add(gradeOne);
-        gradeTwo.setExercise(exerciseOne);
-        exerciseOne.getGrades().add(gradeTwo);
-        gradeThree.setExercise(exerciseOne);
-        exerciseOne.getGrades().add(gradeThree);
+        studentTwo.getGrades().add(gradeTwo);
+        studentTwo.getGrades().add(gradeMathTwo);
+        gradeTwo.setStudent(studentTwo);
+        gradeMathTwo.setStudent(studentTwo);
+
+        studentThree.getGrades().add(gradeThree);
+        studentThree.getGrades().add(gradeMathThree);
+        gradeThree.setStudent(studentThree);
+        gradeMathThree.setStudent(studentThree);
+
+        gradeOne.setExercise(exerciseChem);
+        gradeMathOne.setExercise(exerciseMathTwo);
+        exerciseChem.getGrades().add(gradeOne);
+        exerciseMathTwo.getGrades().add(gradeMathOne);
+
+        gradeTwo.setExercise(exerciseChem);
+        gradeMathTwo.setExercise(exerciseMathTwo);
+        exerciseChem.getGrades().add(gradeTwo);
+        exerciseMathTwo.getGrades().add(gradeMathTwo);
+
+        gradeThree.setExercise(exerciseChem);
+        gradeMathThree.setExercise(exerciseMathTwo);
+        exerciseChem.getGrades().add(gradeThree);
+        exerciseMathTwo.getGrades().add(gradeMathThree);
 
         userModelRepository.save(studentOneUserModel);
         userModelRepository.save(studentTwoUserModel);
@@ -165,8 +204,12 @@ public class DBSeeder {
         gradeRepository.save(gradeOne);
         gradeRepository.save(gradeTwo);
         gradeRepository.save(gradeThree);
+        gradeRepository.save(gradeMathOne);
+        gradeRepository.save(gradeMathTwo);
+        gradeRepository.save(gradeMathThree);
 
-        exerciseRepository.save(exerciseOne);
+        exerciseRepository.save(exerciseChem);
+        exerciseRepository.save(exerciseMathTwo);
 
         //CREATING STUDENT TO CLASS ONE
         UserModel studentFourUserModel = new UserModel(
@@ -206,19 +249,19 @@ public class DBSeeder {
         studentSixUserModel.setUserDetails(studentSix);
         studentSix.setUserModel(studentSixUserModel);
 
-        studentFour.setSchoolClass(schoolClassTwo);
-        schoolClassTwo.getStudents().add(studentFour);
-        studentFive.setSchoolClass(schoolClassTwo);
-        schoolClassTwo.getStudents().add(studentFive);
-        studentSix.setSchoolClass(schoolClassTwo);
-        schoolClassTwo.getStudents().add(studentSix);
+        studentFour.setSchoolClass(schoolClassMath);
+        schoolClassMath.getStudents().add(studentFour);
+        studentFive.setSchoolClass(schoolClassMath);
+        schoolClassMath.getStudents().add(studentFive);
+        studentSix.setSchoolClass(schoolClassMath);
+        schoolClassMath.getStudents().add(studentSix);
 
-        studentFour.getExercises().add(exerciseTwo);
-        exerciseTwo.getStudents().add(studentFour);
-        studentFive.getExercises().add(exerciseTwo);
-        exerciseTwo.getStudents().add(studentFive);
-        studentSix.getExercises().add(exerciseTwo);
-        exerciseTwo.getStudents().add(studentSix);
+        studentFour.getExercises().add(exerciseMathOne);
+        exerciseMathOne.getStudents().add(studentFour);
+        studentFive.getExercises().add(exerciseMathOne);
+        exerciseMathOne.getStudents().add(studentFive);
+        studentSix.getExercises().add(exerciseMathOne);
+        exerciseMathOne.getStudents().add(studentSix);
 
         studentFour.getGrades().add(gradeFour);
         gradeFour.setStudent(studentFour);
@@ -227,12 +270,12 @@ public class DBSeeder {
         studentSix.getGrades().add(gradeSix);
         gradeSix.setStudent(studentSix);
 
-        gradeFour.setExercise(exerciseTwo);
-        exerciseTwo.getGrades().add(gradeFour);
-        gradeFive.setExercise(exerciseTwo);
-        exerciseTwo.getGrades().add(gradeFive);
-        gradeSix.setExercise(exerciseTwo);
-        exerciseTwo.getGrades().add(gradeSix);
+        gradeFour.setExercise(exerciseMathOne);
+        exerciseMathOne.getGrades().add(gradeFour);
+        gradeFive.setExercise(exerciseMathOne);
+        exerciseMathOne.getGrades().add(gradeFive);
+        gradeSix.setExercise(exerciseMathOne);
+        exerciseMathOne.getGrades().add(gradeSix);
 
         userModelRepository.save(studentFourUserModel);
         userModelRepository.save(studentFiveUserModel);
@@ -246,7 +289,9 @@ public class DBSeeder {
         gradeRepository.save(gradeFive);
         gradeRepository.save(gradeSix);
 
-        exerciseRepository.save(exerciseTwo);
+        exerciseRepository.save(exerciseMathOne);
+        UserModel userModel = new UserModel("admin@mail.com", "admin","adminpass",UserRole.ADMIN.name());
+        userModelRepository.save(userModel);
     }
 
     public Date getDateInFormat(int year, int month, int day) throws ParseException {

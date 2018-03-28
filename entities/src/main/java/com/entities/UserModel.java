@@ -1,5 +1,6 @@
 package com.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,7 +28,7 @@ public class UserModel implements UserDetails {
     private String email;
 
     @NotNull
-    @Size(min = 6)
+    @Size(min = 4, max = 15)
     private String username;
 
     @NotNull
@@ -131,5 +132,6 @@ public class UserModel implements UserDetails {
         }
         return null;
     }
+
 }
 

@@ -45,7 +45,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             return null;
         }
 
-        Collection <? extends GrantedAuthority> autorities = getUserAutorities(creds.getUsername());
+        Collection <? extends GrantedAuthority> autorities = getUserAuthorities(creds.getUsername());
 
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -57,8 +57,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     }
 
 
-    private Collection<? extends GrantedAuthority> getUserAutorities(String username){
-        return userModelRepository.findByUsername(username).getAuthorities();
+    private Collection<? extends GrantedAuthority> getUserAuthorities(String username){
+        return userModelRepository.findByUsername(username).get().getAuthorities();
     }
 
     @Override

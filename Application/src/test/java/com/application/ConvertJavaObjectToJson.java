@@ -1,4 +1,4 @@
-package security;
+package com.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,5 +11,5 @@ public class ConvertJavaObjectToJson {
             throw new RuntimeException(e);
         }
     }
-}
 
+}

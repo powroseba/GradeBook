@@ -10,6 +10,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,7 +23,7 @@ public class TokenAuthenticationService {
     private static final String TOKEN_PREFIX = "Bearer";
     private static final String HEADER_STRING = "Authorization";
 
-    private static final int TOKEN_TIME = 172800;
+    private static final int TOKEN_TIME = 1200;
     private static final String TOKEN_HEADER_TEMPLATE = "Bearer %s";
 
     static void addAuthentication(HttpServletResponse res, String username, Collection<? extends GrantedAuthority> authorities) {
@@ -49,7 +53,7 @@ public class TokenAuthenticationService {
         return null;
     }
 
-    static Collection <GrantedAuthority> generateAuthorities(String roleChain) {
+    private static Collection <GrantedAuthority> generateAuthorities(String roleChain) {
         Collection <GrantedAuthority> authorities = new HashSet<>();
 
         if (roleChain.contains(UserRole.ADMIN.name())) {
@@ -64,4 +68,5 @@ public class TokenAuthenticationService {
 
         return authorities;
     }
+
 }
