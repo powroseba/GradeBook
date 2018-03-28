@@ -1,11 +1,11 @@
 package com.domain.dto;
 
 import com.entities.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.ResourceSupport;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,9 +15,9 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ExerciseDTO {
+public class ExerciseDTO extends ResourceSupport {
 
-    private Long id;
+    private Long exerciseId;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Teacher teacher;
@@ -33,9 +33,9 @@ public class ExerciseDTO {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Student> students = new HashSet<>();
 
-    public ExerciseDTO(Long id, Teacher teacher, Exercises nameOfExercise, Set<Grade> grades,
+    public ExerciseDTO(Long exerciseId, Teacher teacher, Exercises nameOfExercise, Set<Grade> grades,
                        SchoolClass schoolClass, Set<Student> students) {
-        this.id = id;
+        this.exerciseId = exerciseId;
         this.teacher = teacher;
         this.nameOfExercise = nameOfExercise;
         this.grades = grades;

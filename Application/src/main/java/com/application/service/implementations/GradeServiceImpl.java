@@ -46,7 +46,7 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public ExerciseAndGrades findGradesForStudent(HttpServletRequest request) {
         String username = tokenUsernameParserService.parseUsername(request);
-        UserModel userModel = userModelRepository.findByUsername(username);
+        UserModel userModel = userModelRepository.findByUsername(username).get();
 
         if (!Optional.ofNullable(userModel).isPresent()) {
             throw new UserNotFoundException();
@@ -87,7 +87,7 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public void addGrade(HttpServletRequest request, Long studentId, Exercises exercises, Grade grade) {
         String username = tokenUsernameParserService.parseUsername(request);
-        Teacher teacher = (Teacher) userModelRepository.findByUsername(username).getUserModelDetails();
+        Teacher teacher = (Teacher) userModelRepository.findByUsername(username).get().getUserModelDetails();
         if (!Optional.ofNullable(teacher).isPresent()) {
             throw new TeacherNotFoundException();
         }
@@ -97,7 +97,7 @@ public class GradeServiceImpl implements GradeService {
         Student student = studentRepository.findOne(studentId);
 
         Exercise exercise = exerciseRepository.findByTeacherAndSchoolClassAndNameOfExerciseAndStudentsIsContaining
-                (teacher, student.getSchoolClass(), exercises, student);
+                (teacher, student.getSchoolClass(), exercises, student).get();
 
         if (!Optional.ofNullable(exercise).isPresent()) {
             throw new ExerciseNotFoundException();

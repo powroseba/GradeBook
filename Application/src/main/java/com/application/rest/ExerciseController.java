@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,4 +28,18 @@ public class ExerciseController {
     public List<ExerciseDTO> getTeacherExercises(HttpServletRequest request) {
         return exerciseService.getTeacherExercises(request);
     }
+
+    @GetMapping(value = "/student")
+    @PreAuthorize("hasRole('STUDENT')")
+    public List<ExerciseDTO> getStudentExercises(HttpServletRequest request) {
+        return exerciseService.getStudentExercises(request);
+    }
+
+    @GetMapping(value = "/")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+    public ExerciseDTO getExercie(@RequestParam("exerciseId") Long id) {
+        return exerciseService.getExercise(id);
+    }
+
+
 }

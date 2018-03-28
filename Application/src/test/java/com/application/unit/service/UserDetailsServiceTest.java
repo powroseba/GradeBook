@@ -20,6 +20,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -52,7 +54,7 @@ public class UserDetailsServiceTest {
 
     @Test
     public void changeEmail() throws Exception {
-        UserModel userModel = new UserModel();
+        Optional<UserModel> userModel = Optional.of(new UserModel());
         when(userModelRepository.findByUsername(userData.getUsername())).thenReturn(userModel);
 
         userDetailsService.changeEmail(request, userData);
@@ -63,7 +65,7 @@ public class UserDetailsServiceTest {
 
         assertNotNull(userModelRepository.findByUsername(userData.getUsername()));
 
-        assertThat(userData.getEmail()).isEqualTo(userModel.getEmail());
+        assertThat(userData.getEmail()).isEqualTo(userModel.get().getEmail());
     }
 
     @Test(expected = UserNotFoundException.class)
@@ -78,7 +80,7 @@ public class UserDetailsServiceTest {
     @Test
     public void changePassword() throws Exception {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        UserModel userModel = new UserModel("email@mail.com","email","currentPassword", UserRole.STUDENT.name());
+        Optional<UserModel> userModel = Optional.of(new UserModel("email@mail.com","email","currentPassword", UserRole.STUDENT.name()));
         when(userModelRepository.findByUsername(userData.getUsername())).thenReturn(userModel);
 
         assertNotNull(userModel);
@@ -87,10 +89,10 @@ public class UserDetailsServiceTest {
 
         assertNotNull(userModelRepository.findByUsername(userData.getUsername()));
 
-        assertThat(encoder.matches(userData.getCurrentPassword(), userModel.getPassword())).isTrue();
+        assertThat(encoder.matches(userData.getCurrentPassword(), userModel.get().getPassword())).isTrue();
         userDetailsService.changePassword(request, userData);
         assertThat(userData.getNewPassword()).isEqualTo(userData.getNewRepeatPassword());
-        assertThat(encoder.matches(userData.getNewPassword(), userModel.getPassword())).isTrue();
+        assertThat(encoder.matches(userData.getNewPassword(), userModel.get().getPassword())).isTrue();
     }
 
     @Test(expected = UserNotFoundException.class)
@@ -107,7 +109,7 @@ public class UserDetailsServiceTest {
         expectedEx.expect(DifferentNewPasswordsException.class);
 
         userData.setNewRepeatPassword(userData.getNewPassword() + "ups");
-        when(userModelRepository.findByUsername(userData.getUsername())).thenReturn(new UserModel());
+        when(userModelRepository.findByUsername(userData.getUsername())).thenReturn(Optional.of(new UserModel()));
 
         userDetailsService.changePassword(request, userData);
 
@@ -124,7 +126,7 @@ public class UserDetailsServiceTest {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         expectedEx.expect(UncorrectCurrentPasswordsException.class);
 
-        UserModel userModel = new UserModel("email@mail.com","email","differentPassword", UserRole.STUDENT.name());
+        Optional<UserModel> userModel = Optional.of(new UserModel("email@mail.com","email","differentPassword", UserRole.STUDENT.name()));
         when(userModelRepository.findByUsername(userData.getUsername())).thenReturn(userModel);
 
         userDetailsService.changePassword(request, userData);
@@ -136,6 +138,6 @@ public class UserDetailsServiceTest {
         assertNotNull(userModelRepository.findByUsername(userData.getUsername()));
         assertThat(userModelRepository.findByUsername(userData.getUsername())).isEqualTo(userModel);
 
-        assertThat(encoder.matches(userData.getCurrentPassword(), userModel.getPassword())).isFalse();
+        assertThat(encoder.matches(userData.getCurrentPassword(), userModel.get().getPassword())).isFalse();
     }
 }
