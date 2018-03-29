@@ -57,7 +57,7 @@ public class ExerciseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$[0].nameOfExercise", is(exercise.getNameOfExercise().toString())))
-                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].exerciseId", is(1)))
                 .andExpect(jsonPath("$", hasSize(2)));
         verify(exerciseService, times(1)).getTeacherExercises(any());
         verifyNoMoreInteractions(exerciseService);

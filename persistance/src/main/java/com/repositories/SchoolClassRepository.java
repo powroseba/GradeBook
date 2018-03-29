@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface SchoolClassRepository extends JpaRepository<SchoolClass, Long>{
-    Optional<SchoolClass> findByName(String name);
+    SchoolClass findByName(String name);
 }

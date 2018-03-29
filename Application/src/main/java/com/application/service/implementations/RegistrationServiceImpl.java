@@ -78,7 +78,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
             }
             case "STUDENT": {
-                SchoolClass schoolClass = schoolClassRepository.findByName(authModel.getSchoolClassName()).get();
+                SchoolClass schoolClass = schoolClassRepository.findByName(authModel.getSchoolClassName());
                 if (!Optional.ofNullable(schoolClass).isPresent()) {
                     throw new SchoolClassNotFound();
                 }

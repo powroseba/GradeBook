@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -59,9 +61,9 @@ public class GradeControllerTest {
 
         when(gradeService.findGradesForStudent(any())).thenReturn(getExampleGrades());
 
-        mvc.perform(get("/grades").header("Authorization", token))
+        mvc.perform(get("/grades").header("Authorization", token).accept(MediaTypes.HAL_JSON_VALUE))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE + ";charset=UTF-8"))
                 .andExpect(jsonPath("$.email", is(getExampleGrades().getEmail())));
         verify(gradeService, times(1)).findGradesForStudent(any());
         verifyNoMoreInteractions(gradeService);
@@ -213,7 +215,7 @@ public class GradeControllerTest {
     public void sendPDFWithMyGradesTest() throws Exception {
         doNothing().when(rabbitProducer).sendGrades(any());
 
-        mvc.perform(post("/grades/pdf").header("Authorization", token))
+        mvc.perform(get("/grades/pdf").header("Authorization", token))
                 .andExpect(status().isOk());
         verify(rabbitProducer, times(1)).sendGrades(any());
         verifyNoMoreInteractions(rabbitProducer);

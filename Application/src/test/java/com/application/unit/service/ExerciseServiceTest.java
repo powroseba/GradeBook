@@ -15,14 +15,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -51,7 +47,7 @@ public class ExerciseServiceTest {
 
     @Test(expected = TeacherNotFoundException.class)
     public void getTeacherExercisesExpectNotFoundTeacherTest() throws Exception {
-        when(userModelRepository.findByUsername(username)).thenReturn(Optional.of(new UserModel()));
+        when(userModelRepository.findByUsername(username)).thenReturn(new UserModel());
 
         exerciseService.getTeacherExercises(request);
 
@@ -70,19 +66,18 @@ public class ExerciseServiceTest {
 
     @Test
     public void getTeacherExercisesTest() throws Exception {
+        Teacher t = (Teacher) getExampleUserModel().getUserModelDetails();
+        List<Exercise> list = Arrays.asList(new Exercise(Exercises.BIOLOGY), new Exercise(Exercises.ENGLISH));
         when(userModelRepository.findByUsername(username)).thenReturn(getExampleUserModel());
-        Teacher t = (Teacher) getExampleUserModel().get().getUserModelDetails();
-        List<Exercise> exercises = (List<Exercise>) ((Teacher) getExampleUserModel().get().getUserModelDetails()).getExercises();
-        when(exerciseRepository.findByTeacher(t)).thenReturn(exercises);
+        when(exerciseRepository.findByTeacher(t)).thenReturn(list);
 
         exerciseService.getTeacherExercises(request);
 
         assertNotNull(t);
-        assertNotNull(t);
     }
 
-    public Optional<UserModel> getExampleUserModel() {
-        Optional<UserModel> userModel = Optional.of(new UserModel("teacher@mail.com", "teacher", "password", UserRole.TEACHER.name()));
+    public UserModel getExampleUserModel() {
+        UserModel userModel = new UserModel("teacher@mail.com", "teacher", "password", UserRole.TEACHER.name());
         Teacher teacher = new Teacher("firstname", "lastname", new Date());
         List<Exercise> exercises = Arrays.asList(new Exercise(Exercises.BIOLOGY), new Exercise(Exercises.ENGLISH));
 
@@ -91,8 +86,8 @@ public class ExerciseServiceTest {
         exercises.get(0).setTeacher(teacher);
         exercises.get(1).setTeacher(teacher);
 
-        teacher.setUserModel(userModel.get());
-        userModel.get().setUserDetails(teacher);
+        teacher.setUserModel(userModel);
+        userModel.setUserDetails(teacher);
 
         return userModel;
     }

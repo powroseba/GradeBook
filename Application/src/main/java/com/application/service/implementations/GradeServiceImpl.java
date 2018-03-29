@@ -1,6 +1,7 @@
 package com.application.service.implementations;
 
 import com.application.exceptions.notfound.*;
+import com.application.rest.GradeController;
 import com.application.service.GradeService;
 import com.application.tools.TokenUsernameParserService;
 import com.domain.ExerciseAndGrades;
@@ -10,6 +11,7 @@ import com.repositories.GradeRepository;
 import com.repositories.StudentRepository;
 import com.repositories.UserModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -17,10 +19,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 public class GradeServiceImpl implements GradeService {
@@ -46,7 +52,7 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public ExerciseAndGrades findGradesForStudent(HttpServletRequest request) {
         String username = tokenUsernameParserService.parseUsername(request);
-        UserModel userModel = userModelRepository.findByUsername(username).get();
+        UserModel userModel = userModelRepository.findByUsername(username);
 
         if (!Optional.ofNullable(userModel).isPresent()) {
             throw new UserNotFoundException();
@@ -55,7 +61,8 @@ public class GradeServiceImpl implements GradeService {
         ExerciseAndGrades exerciseAndGrades = new ExerciseAndGrades(userModel.getEmail());
 
 
-        Query query = em.createNativeQuery("SELECT exercise.name_of_exercise, grade.grade FROM grade inner join exercise on (grade.exercise_id = exercise.id) where grade.student_id = ?");
+        Query query = em.createNativeQuery("SELECT exercise.name_of_exercise, grade.grade FROM" +
+                " grade inner join exercise on (grade.exercise_id = exercise.id) where grade.student_id = ?");
         List result = query.setParameter(1, id).getResultList();
 
         if (result.isEmpty()) {
@@ -81,13 +88,17 @@ public class GradeServiceImpl implements GradeService {
                         put(key, gradeList);
             }
         }
+
+        exerciseAndGrades.add(ControllerLinkBuilder.linkTo(GradeController.class).slash("/pdf")
+                .withRel("Send all grades and exercises to email in PDF format"));
+
         return exerciseAndGrades;
     }
 
     @Override
     public void addGrade(HttpServletRequest request, Long studentId, Exercises exercises, Grade grade) {
         String username = tokenUsernameParserService.parseUsername(request);
-        Teacher teacher = (Teacher) userModelRepository.findByUsername(username).get().getUserModelDetails();
+        Teacher teacher = (Teacher) userModelRepository.findByUsername(username).getUserModelDetails();
         if (!Optional.ofNullable(teacher).isPresent()) {
             throw new TeacherNotFoundException();
         }
@@ -97,7 +108,7 @@ public class GradeServiceImpl implements GradeService {
         Student student = studentRepository.findOne(studentId);
 
         Exercise exercise = exerciseRepository.findByTeacherAndSchoolClassAndNameOfExerciseAndStudentsIsContaining
-                (teacher, student.getSchoolClass(), exercises, student).get();
+                (teacher, student.getSchoolClass(), exercises, student);
 
         if (!Optional.ofNullable(exercise).isPresent()) {
             throw new ExerciseNotFoundException();

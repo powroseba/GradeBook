@@ -41,7 +41,7 @@ public class GradeController {
         gradeService.addGrade(request, studentId, exercises, grade);
     }
 
-    @PostMapping(value = "/pdf")
+    @GetMapping(value = "/pdf")
     @PreAuthorize("hasRole('STUDENT')")
     public void sendPDFWithMyGrades(HttpServletRequest request) {
         rabbitProducer.sendGrades(request);

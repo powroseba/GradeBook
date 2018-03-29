@@ -12,7 +12,7 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 
     List<Exercise> findByTeacher(Teacher teacher);
 
-    Optional<Exercise> findByTeacherAndSchoolClassAndNameOfExerciseAndStudentsIsContaining(Teacher teacher, SchoolClass schoolClass,
+    Exercise findByTeacherAndSchoolClassAndNameOfExerciseAndStudentsIsContaining(Teacher teacher, SchoolClass schoolClass,
                                                                                            Exercises nameOfExercise, Student student);
 
     List<Exercise> findByStudents_Id(Long id);

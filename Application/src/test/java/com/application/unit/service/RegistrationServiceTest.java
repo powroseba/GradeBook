@@ -97,7 +97,7 @@ public class RegistrationServiceTest {
     @Test(expected = UserAlreadyExistException.class)
     public void signUpExpectUserAlreadyExistException() throws Exception {
         AuthModel authModel = (AuthModel) getModels(UserRole.TEACHER).get(0);
-        when(userModelRepository.findByEmail(authModel.getEmail())).thenReturn((Optional<UserModel>) getModels(UserRole.TEACHER).get(1));
+        when(userModelRepository.findByEmail(authModel.getEmail())).thenReturn((UserModel) getModels(UserRole.TEACHER).get(1));
         registrationService.signUp(authModel);
 
         assertNotNull(userModelRepository.findByEmail(authModel.getEmail()));
@@ -109,8 +109,8 @@ public class RegistrationServiceTest {
         AuthModel authModel = (AuthModel) models.get(0);
         UserModel userModel = (UserModel) models.get(1);
         Student student = (Student) models.get(5);
-        Optional<SchoolClass> schoolClass = (Optional<SchoolClass>) models.get(4);
-        schoolClass.get().getExercises().add((Exercise)models.get(3));
+        SchoolClass schoolClass = (SchoolClass) models.get(4);
+        schoolClass.getExercises().add((Exercise)models.get(3));
 
         when(userModelRepository.save(any(UserModel.class))).thenReturn(userModel);
         when(studentRepository.save(any(Student.class))).thenReturn(student);
@@ -127,15 +127,15 @@ public class RegistrationServiceTest {
         assertNotNull(studentRepository.save(any(Student.class)));
         assertNotNull(schoolClassRepository.findByName(authModel.getSchoolClassName()));
 
-        assertThat(schoolClass.get().getExercises()).isNotEmpty();
+        assertThat(schoolClass.getExercises()).isNotEmpty();
         assertThat(userModel.getUserModelDetails()).isEqualTo(student);
         assertThat(student.getUserModel()).isEqualTo(userModel);
 
         assertThat(student.getSchoolClass()).isEqualTo(schoolClass);
-        assertThat(schoolClass.get().getStudents()).containsExactly(student);
+        assertThat(schoolClass.getStudents()).containsExactly(student);
 
-        assertThat(student.getExercises()).isEqualTo(schoolClass.get().getExercises());
-        assertThat(schoolClass.get().getExercises()).isEqualTo(student.getExercises());
+        assertThat(student.getExercises()).isEqualTo(schoolClass.getExercises());
+        assertThat(schoolClass.getExercises()).isEqualTo(student.getExercises());
 
         assertThat(authModel.getDateOfBirth()).isEqualToIgnoringMinutes(student.getDateOfBirth());
         assertThat(authModel.getFirstName()).isEqualTo(student.getFirstName());

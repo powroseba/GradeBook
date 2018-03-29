@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public void changeEmail(HttpServletRequest request, UserData userData) {
         String username = tokenUsernameParserService.parseUsername(request);
-        UserModel userModel = userModelRepository.findByUsername(username).get();
+        UserModel userModel = userModelRepository.findByUsername(username);
 
         if (!Optional.ofNullable(userModel).isPresent()) {
             throw new UserNotFoundException();
@@ -43,7 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public void changePassword(HttpServletRequest request, UserData userData) {
         String username = tokenUsernameParserService.parseUsername(request);
-        UserModel userModel = userModelRepository.findByUsername(username).get();
+        UserModel userModel = userModelRepository.findByUsername(username);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if (!Optional.ofNullable(userModel).isPresent()) {

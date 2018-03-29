@@ -40,7 +40,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public List<ExerciseDTO> getTeacherExercises(HttpServletRequest request) {
         String userName = tokenUsernameParserService.parseUsername(request);
-        Teacher teacher = (Teacher)userModelRepository.findByUsername(userName).get().getUserModelDetails();
+        Teacher teacher = (Teacher)userModelRepository.findByUsername(userName).getUserModelDetails();
 
         if (!Optional.ofNullable(teacher).isPresent()) {
             throw new TeacherNotFoundException();
@@ -62,7 +62,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public List<ExerciseDTO> getStudentExercises(HttpServletRequest request) {
         String username = tokenUsernameParserService.parseUsername(request);
-        Student student = (Student)userModelRepository.findByUsername(username).get().getUserModelDetails();
+        Student student = (Student)userModelRepository.findByUsername(username).getUserModelDetails();
 
         if (!Optional.ofNullable(student).isPresent()) {
             throw new StudentNotFoundException();

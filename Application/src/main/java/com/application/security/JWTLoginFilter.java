@@ -58,7 +58,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 
     private Collection<? extends GrantedAuthority> getUserAuthorities(String username){
-        return userModelRepository.findByUsername(username).get().getAuthorities();
+        return userModelRepository.findByUsername(username).getAuthorities();
     }
 
     @Override

@@ -24,7 +24,7 @@ public class PDFGenerator {
 
     public byte[] createPDF(ExerciseAndGrades exerciseAndGrades) {
 
-        Student student = (Student) userModelRepository.findByEmail(exerciseAndGrades.getEmail()).get().getUserModelDetails();
+        Student student = (Student) userModelRepository.findByEmail(exerciseAndGrades.getEmail()).getUserModelDetails();
         Document document = new Document();
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
