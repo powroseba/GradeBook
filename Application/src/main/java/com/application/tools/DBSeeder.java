@@ -8,7 +8,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 @Component
 public class DBSeeder {
@@ -28,32 +31,34 @@ public class DBSeeder {
 //    @PostConstruct
     public void seed() throws ParseException {
         SchoolClass schoolClassChemBiol = new SchoolClass("1 A", Profile.CHEMISTRY_AND_BIOLOGY);
-
         SchoolClass schoolClassMath = new SchoolClass("2 B", Profile.MATHEMATICS);
         SchoolClass schoolClassGeography = new SchoolClass("3 A", Profile.GEOGRAPHY);
         SchoolClass schoolClassAng = new SchoolClass("2 A", Profile.ANGELIAN);
         SchoolClass schoolClassPhysic = new SchoolClass("1 B", Profile.PHYSICS);
 
-        UserModel userModelTChem = new UserModel("teacherchem@grr.la","teacherchem","teacherpass", UserRole.TEACHER.name());
-        UserModel userModelTMath = new UserModel("teachermath@grr.la","teachermath", "teacherpass",UserRole.TEACHER.name());
-        UserModel userModelTGeo = new UserModel("teachergeo@grr.la","teachergeo", "teacherpass",UserRole.TEACHER.name());
-        UserModel userModelTAng = new UserModel("teacherang@grr.la","teacherang", "teacherpass",UserRole.TEACHER.name());
-        UserModel userModelTPhysic = new UserModel("teacherphysic@grr.la","teacherphysic", "teacherpass",UserRole.TEACHER.name());
+        UserModel userModelTChem = new UserModel("teacherchem@grr.la", "teacherchem", "teacherpass", UserRole.TEACHER.name());
+        UserModel userModelTMath = new UserModel("teachermath@grr.la", "teachermath", "teacherpass", UserRole.TEACHER.name());
+        UserModel userModelTGeo = new UserModel("teachergeo@grr.la", "teachergeo", "teacherpass", UserRole.TEACHER.name());
+        UserModel userModelTAng = new UserModel("teacherang@grr.la", "teacherang", "teacherpass", UserRole.TEACHER.name());
+        UserModel userModelTPhysic = new UserModel("teacherphysic@grr.la", "teacherphysic", "teacherpass", UserRole.TEACHER.name());
 
 
-        Teacher teacherChem = new Teacher("Adam","Żyła",
+        Teacher teacherChem = new Teacher("Adam", "Żyła",
                 getDateInFormat(1967, 2, 17));
-
-        Teacher teacherMath = new Teacher("Janina","Kula",
+        Teacher teacherMath = new Teacher("Janina", "Kula",
                 getDateInFormat(1973, 9, 1));
-        Teacher teacherGeo = new Teacher("Karol","Swiat",
+        Teacher teacherGeo = new Teacher("Karol", "Swiat",
                 getDateInFormat(1985, 1, 21));
-        Teacher teacherAng = new Teacher("Lucyna","Wielka",
+        Teacher teacherAng = new Teacher("Lucyna", "Wielka",
                 getDateInFormat(1979, 3, 12));
-        Teacher teacherPhysic = new Teacher("Danuta","Wektor",
+        Teacher teacherPhysic = new Teacher("Danuta", "Wektor",
                 getDateInFormat(1970, 7, 17));
 
-        Exercise exerciseChem = new Exercise(Exercises.CHEMY);
+        Exercise exerciseChemOne = new Exercise(Exercises.CHEMY);
+        Exercise exerciseChemTwo = new Exercise(Exercises.CHEMY);
+        Exercise exerciseChemThree = new Exercise(Exercises.CHEMY);
+        Exercise exerciseChemFour = new Exercise(Exercises.CHEMY);
+        Exercise exerciseChemFive = new Exercise(Exercises.CHEMY);
 
         Exercise exerciseMathOne = new Exercise(Exercises.MATH);
         Exercise exerciseMathTwo = new Exercise(Exercises.MATH);
@@ -87,7 +92,6 @@ public class DBSeeder {
         schoolClassPhysic = schoolClassRepository.save(schoolClassPhysic);
 
         userModelTChem = userModelRepository.save(userModelTChem);
-
         userModelTMath = userModelRepository.save(userModelTMath);
         userModelTGeo = userModelRepository.save(userModelTGeo);
         userModelTAng = userModelRepository.save(userModelTAng);
@@ -99,7 +103,11 @@ public class DBSeeder {
         teacherAng = teacherRepository.save(teacherAng);
         teacherPhysic = teacherRepository.save(teacherPhysic);
 
-        exerciseChem = exerciseRepository.save(exerciseChem);
+        exerciseChemOne = exerciseRepository.save(exerciseChemOne);
+        exerciseChemTwo = exerciseRepository.save(exerciseChemTwo);
+        exerciseChemThree = exerciseRepository.save(exerciseChemThree);
+        exerciseChemFour = exerciseRepository.save(exerciseChemFour);
+        exerciseChemFive = exerciseRepository.save(exerciseChemFive);
 
         exerciseMathOne = exerciseRepository.save(exerciseMathOne);
         exerciseMathTwo = exerciseRepository.save(exerciseMathTwo);
@@ -137,8 +145,16 @@ public class DBSeeder {
         teacherAng.setUserModel(userModelTAng);
         teacherPhysic.setUserModel(userModelTPhysic);
 
-        teacherChem.getExercises().add(exerciseChem);
-        exerciseChem.setTeacher(teacherChem);
+        teacherChem.getExercises().add(exerciseChemOne);
+        teacherChem.getExercises().add(exerciseChemTwo);
+        teacherChem.getExercises().add(exerciseChemThree);
+        teacherChem.getExercises().add(exerciseChemFour);
+        teacherChem.getExercises().add(exerciseChemFive);
+        exerciseChemOne.setTeacher(teacherChem);
+        exerciseChemTwo.setTeacher(teacherChem);
+        exerciseChemThree.setTeacher(teacherChem);
+        exerciseChemFour.setTeacher(teacherChem);
+        exerciseChemFive.setTeacher(teacherChem);
 
         teacherMath.getExercises().add(exerciseMathOne);
         teacherMath.getExercises().add(exerciseMathTwo);
@@ -196,8 +212,16 @@ public class DBSeeder {
         schoolClassPhysic.setTutor(teacherPhysic);
 
 
-        exerciseChem.setSchoolClass(schoolClassChemBiol);
-        schoolClassChemBiol.getExercises().add(exerciseChem);
+        exerciseChemOne.setSchoolClass(schoolClassChemBiol);
+        exerciseChemTwo.setSchoolClass(schoolClassChemBiol);
+        exerciseChemThree.setSchoolClass(schoolClassChemBiol);
+        exerciseChemFour.setSchoolClass(schoolClassChemBiol);
+        exerciseChemFive.setSchoolClass(schoolClassChemBiol);
+        schoolClassChemBiol.getExercises().add(exerciseChemOne);
+        schoolClassChemBiol.getExercises().add(exerciseChemTwo);
+        schoolClassChemBiol.getExercises().add(exerciseChemThree);
+        schoolClassChemBiol.getExercises().add(exerciseChemFour);
+        schoolClassChemBiol.getExercises().add(exerciseChemFive);
 
         exerciseMathOne.setSchoolClass(schoolClassMath);
         exerciseMathTwo.setSchoolClass(schoolClassChemBiol);
@@ -255,7 +279,11 @@ public class DBSeeder {
         userModelRepository.save(userModelTAng);
         userModelRepository.save(userModelTPhysic);
 
-        exerciseChem = exerciseRepository.save(exerciseChem);
+        exerciseChemOne = exerciseRepository.save(exerciseChemOne);
+        exerciseChemTwo = exerciseRepository.save(exerciseChemTwo);
+        exerciseChemThree = exerciseRepository.save(exerciseChemThree);
+        exerciseChemFour = exerciseRepository.save(exerciseChemFour);
+        exerciseChemFive = exerciseRepository.save(exerciseChemFive);
 
         exerciseMathOne = exerciseRepository.save(exerciseMathOne);
         exerciseMathTwo = exerciseRepository.save(exerciseMathTwo);
@@ -287,202 +315,213 @@ public class DBSeeder {
         teacherRepository.save(teacherAng);
         teacherRepository.save(teacherPhysic);
 
-        //CREATING STUDENT TO CLASS ONE
-        UserModel studentOneUserModel = new UserModel(
-                "karol98@grr.la", "karol98", "studentone",UserRole.STUDENT.name());
-        UserModel studentTwoUserModel = new UserModel(
-                "sabina98@grr.la", "sabina98", "studenttwo",UserRole.STUDENT.name());
-        UserModel studentThreeUserModel = new UserModel(
-                "filip98@grr.la", "filip98", "studentthree",UserRole.STUDENT.name());
+        List<SchoolClass> schoolClassList = Arrays.asList(
+                schoolClassChemBiol, schoolClassMath, schoolClassGeography, schoolClassAng, schoolClassPhysic
+        );
+
+        List<Exercise> chemyList = Arrays.asList(
+                exerciseChemOne, exerciseChemTwo, exerciseChemThree, exerciseChemFour, exerciseChemFive
+        );
+
+        List<Exercise> mathList = Arrays.asList(
+                exerciseMathOne, exerciseMathTwo, exerciseMathThree, exerciseMathFour, exerciseMathFive
+        );
+
+        List<Exercise> geographicList = Arrays.asList(
+                exerciseGeoOne, exerciseGeoTwo, exerciseGeoThree, exerciseGeoFour, exerciseGeoFive
+        );
+
+        List<Exercise> englishList = Arrays.asList(
+                exerciseAngOne, exerciseAngTwo, exerciseAngThree, exerciseAngFour, exerciseAngFive
+        );
+
+        List<Exercise> physicsList = Arrays.asList(
+                exercisePhysicOne, exercisePhysicTwo, exercisePhysicThree, exercisePhysicFour, exercisePhysicFive
+        );
 
 
-        Student studentOne = new Student("Karol","Dynia",getDateInFormat(1998, 6,21));
-        Student studentTwo = new Student("Sabina","Krakowska",getDateInFormat(1998, 2,7));
-        Student studentThree = new Student("Filip","Tomkow",getDateInFormat(1998, 1,15));
+        for (int i = 0; i < schoolClassList.size(); i++) {
+            SchoolClass schoolClass = schoolClassList.get(i);
+            String className = schoolClass.getName().replace(" ", "");
 
-        Grade gradeOne = new Grade(getDateInFormat(2018, 1,21), 2, "Sprawdzian");
-        Grade gradeTwo = new Grade(getDateInFormat(2018, 1,21), 4, "Sprawdzian");
-        Grade gradeThree = new Grade(getDateInFormat(2018, 1,21), 3, "Sprawdzian");
-
-        Grade gradeMathOne = new Grade(getDateInFormat(2018, 1,30), 2, "Kartkowka");
-        Grade gradeMathTwo = new Grade(getDateInFormat(2018, 1,30), 4, "Kartkowka");
-        Grade gradeMathThree = new Grade(getDateInFormat(2018, 1,30), 3, "Kartkowka");
-
-        //SAVING
-        studentOneUserModel = userModelRepository.save(studentOneUserModel);
-        studentTwoUserModel = userModelRepository.save(studentTwoUserModel);
-        studentThreeUserModel = userModelRepository.save(studentThreeUserModel);
-
-        studentOne = studentRepository.save(studentOne);
-        studentTwo = studentRepository.save(studentTwo);
-        studentThree = studentRepository.save(studentThree);
-
-        gradeOne = gradeRepository.save(gradeOne);
-        gradeTwo = gradeRepository.save(gradeTwo);
-        gradeThree = gradeRepository.save(gradeThree);
-
-        gradeMathOne = gradeRepository.save(gradeMathOne);
-        gradeMathTwo = gradeRepository.save(gradeMathTwo);
-        gradeMathThree = gradeRepository.save(gradeMathThree);
-
-        //RELATIONS
-        studentOneUserModel.setUserDetails(studentOne);
-        studentOne.setUserModel(studentOneUserModel);
-        studentTwoUserModel.setUserDetails(studentTwo);
-        studentTwo.setUserModel(studentTwoUserModel);
-        studentThreeUserModel.setUserDetails(studentThree);
-        studentThree.setUserModel(studentThreeUserModel);
-
-        studentOne.setSchoolClass(schoolClassChemBiol);
-        schoolClassChemBiol.getStudents().add(studentOne);
-        studentTwo.setSchoolClass(schoolClassChemBiol);
-        schoolClassChemBiol.getStudents().add(studentTwo);
-        studentThree.setSchoolClass(schoolClassChemBiol);
-        schoolClassChemBiol.getStudents().add(studentThree);
-
-        studentOne.getExercises().add(exerciseChem);
-        studentOne.getExercises().add(exerciseMathTwo);
-        exerciseChem.getStudents().add(studentOne);
-        exerciseMathTwo.getStudents().add(studentOne);
-
-        studentTwo.getExercises().add(exerciseChem);
-        studentTwo.getExercises().add(exerciseMathTwo);
-        exerciseChem.getStudents().add(studentTwo);
-        exerciseMathTwo.getStudents().add(studentTwo);
-
-        studentThree.getExercises().add(exerciseChem);
-        studentThree.getExercises().add(exerciseMathTwo);
-        exerciseChem.getStudents().add(studentThree);
-        exerciseMathTwo.getStudents().add(studentThree);
-
-        studentOne.getGrades().add(gradeOne);
-        studentOne.getGrades().add(gradeMathOne);
-        gradeOne.setStudent(studentOne);
-        gradeMathOne.setStudent(studentOne);
-
-        studentTwo.getGrades().add(gradeTwo);
-        studentTwo.getGrades().add(gradeMathTwo);
-        gradeTwo.setStudent(studentTwo);
-        gradeMathTwo.setStudent(studentTwo);
-
-        studentThree.getGrades().add(gradeThree);
-        studentThree.getGrades().add(gradeMathThree);
-        gradeThree.setStudent(studentThree);
-        gradeMathThree.setStudent(studentThree);
-
-        gradeOne.setExercise(exerciseChem);
-        gradeMathOne.setExercise(exerciseMathTwo);
-        exerciseChem.getGrades().add(gradeOne);
-        exerciseMathTwo.getGrades().add(gradeMathOne);
-
-        gradeTwo.setExercise(exerciseChem);
-        gradeMathTwo.setExercise(exerciseMathTwo);
-        exerciseChem.getGrades().add(gradeTwo);
-        exerciseMathTwo.getGrades().add(gradeMathTwo);
-
-        gradeThree.setExercise(exerciseChem);
-        gradeMathThree.setExercise(exerciseMathTwo);
-        exerciseChem.getGrades().add(gradeThree);
-        exerciseMathTwo.getGrades().add(gradeMathThree);
-
-        userModelRepository.save(studentOneUserModel);
-        userModelRepository.save(studentTwoUserModel);
-        userModelRepository.save(studentThreeUserModel);
-
-        studentRepository.save(studentOne);
-        studentRepository.save(studentTwo);
-        studentRepository.save(studentThree);
-
-        gradeRepository.save(gradeOne);
-        gradeRepository.save(gradeTwo);
-        gradeRepository.save(gradeThree);
-        gradeRepository.save(gradeMathOne);
-        gradeRepository.save(gradeMathTwo);
-        gradeRepository.save(gradeMathThree);
-
-        exerciseRepository.save(exerciseChem);
-        exerciseRepository.save(exerciseMathTwo);
-
-        //CREATING STUDENT TO CLASS ONE
-        UserModel studentFourUserModel = new UserModel(
-                "adam97@grr.la", "adam97", "studentfour",UserRole.STUDENT.name());
-        UserModel studentFiveUserModel = new UserModel(
-                "emilia97@grr.la", "emilia97", "studentfive",UserRole.STUDENT.name());
-        UserModel studentSixUserModel = new UserModel(
-                "krystian97@grr.la", "krystian97", "studentfive",UserRole.STUDENT.name());
+            UserModel student1UserModel = userModelRepository.save(new UserModel(
+                    "karol" + className + "@grr.la", "karol" + className, "student", UserRole.STUDENT.name()));
+            UserModel student2UserModel = userModelRepository.save(new UserModel(
+                    "sabina" + className + "@grr.la", "sabina" + className, "student", UserRole.STUDENT.name()));
+            UserModel student3UserModel = userModelRepository.save(new UserModel(
+                    "filip" + className + "@grr.la", "filip" + className, "student", UserRole.STUDENT.name()));
+            UserModel student4UserModel = userModelRepository.save(new UserModel(
+                    "michal" + className + "@grr.la", "michal" + className, "student", UserRole.STUDENT.name()));
+            UserModel student5UserModel = userModelRepository.save(new UserModel(
+                    "emilia" + className + "@grr.la", "emilia" + className, "student", UserRole.STUDENT.name()));
+            UserModel student6UserModel = userModelRepository.save(new UserModel(
+                    "hubert" + className + "@grr.la", "hubert" + className, "student", UserRole.STUDENT.name()));
+            UserModel student7UserModel = userModelRepository.save(new UserModel(
+                    "lukasz" + className + "@grr.la", "lukasz" + className, "student", UserRole.STUDENT.name()));
+            UserModel student8UserModel = userModelRepository.save(new UserModel(
+                    "karolina" + className + "@grr.la", "karolina" + className, "student", UserRole.STUDENT.name()));
+            UserModel student9UserModel = userModelRepository.save(new UserModel(
+                    "sebastian" + className + "@grr.la", "sebastian" + className, "student", UserRole.STUDENT.name()));
+            UserModel student10UserModel = userModelRepository.save(new UserModel(
+                    "dominika" + className + "@grr.la", "dominika" + className, "student", UserRole.STUDENT.name()));
 
 
-        Student studentFour = new Student("Adam","Kucharz",getDateInFormat(1997, 1,2));
-        Student studentFive = new Student("Emilia","Pliszka",getDateInFormat(1997, 2,3));
-        Student studentSix = new Student("Radek","Szafa",getDateInFormat(1997, 1,23));
+            Student student1 = studentRepository.save(new Student("Karol", "Dynia", getDateInFormat(1999 - i, 6, 21)));
+            Student student2 = studentRepository.save(new Student("Sabina", "Krakowska", getDateInFormat(1999 - i, 2, 7)));
+            Student student3 = studentRepository.save(new Student("Filip", "Tomkow", getDateInFormat(1999 - i, 1, 15)));
+            Student student4 = studentRepository.save(new Student("Michal", "Nos", getDateInFormat(1999 - i, 1, 15)));
+            Student student5 = studentRepository.save(new Student("Emilia", "Krawczyk", getDateInFormat(1999 - i, 1, 15)));
+            Student student6 = studentRepository.save(new Student("Hubert", "Klisza", getDateInFormat(1999 - i, 1, 15)));
+            Student student7 = studentRepository.save(new Student("Lukasz", "Zieminski", getDateInFormat(1999 - i, 1, 15)));
+            Student student8 = studentRepository.save(new Student("Karolina", "Kwiat", getDateInFormat(1999 - i, 1, 15)));
+            Student student9 = studentRepository.save(new Student("Sebastian", "Gmyrek", getDateInFormat(1999 - i, 1, 15)));
+            Student student10 = studentRepository.save(new Student("Dominika", "Wolna", getDateInFormat(1999 - i, 1, 15)));
 
-        Grade gradeFour = new Grade(getDateInFormat(2018, 1,3), 3, "Sprawdzian");
-        Grade gradeFive = new Grade(getDateInFormat(2018, 1,3), 5, "Sprawdzian");
-        Grade gradeSix = new Grade(getDateInFormat(2018, 1,3), 5, "Sprawdzian");
+            List<UserModel> userModelList = Arrays.asList(
+                    student1UserModel, student2UserModel, student3UserModel, student4UserModel, student5UserModel, student6UserModel,
+                    student7UserModel, student8UserModel, student9UserModel, student10UserModel
+            );
 
-        //SAVING
-        studentFourUserModel = userModelRepository.save(studentFourUserModel);
-        studentFiveUserModel = userModelRepository.save(studentFiveUserModel);
-        studentSixUserModel = userModelRepository.save(studentSixUserModel);
+            List<Student> students = Arrays.asList(
+                    student1, student2, student3, student4, student5, student6, student7, student8, student9, student10
+            );
 
-        studentFour = studentRepository.save(studentFour);
-        studentFive = studentRepository.save(studentFive);
-        studentSix = studentRepository.save(studentSix);
+            Exercise chemy = chemyList.get(i);
+            Exercise math = mathList.get(i);
+            Exercise geographic = geographicList.get(i);
+            Exercise english = englishList.get(i);
+            Exercise physic = physicsList.get(i);
 
-        gradeFour = gradeRepository.save(gradeFour);
-        gradeFive = gradeRepository.save(gradeFive);
-        gradeSix = gradeRepository.save(gradeSix);
+            for (int j = 0; j < students.size(); j++) {
+                Random random = new Random();
+                Student student = students.get(j);
+                UserModel userModel = userModelList.get(j);
 
-        //RELATIONS
-        studentFourUserModel.setUserDetails(studentFour);
-        studentFour.setUserModel(studentFourUserModel);
-        studentFiveUserModel.setUserDetails(studentFive);
-        studentFive.setUserModel(studentFiveUserModel);
-        studentSixUserModel.setUserDetails(studentSix);
-        studentSix.setUserModel(studentSixUserModel);
+                Grade examChemy = gradeRepository.save(new Grade(getDateInFormat(2018, 3, 17), random.nextInt(5) + 1, "Sprawdzian"));
+                Grade smallExamChemy = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 21), random.nextInt(5) + 1, "Kartkowka"));
+                Grade speachChemy = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 1), random.nextInt(5) + 1, "Odpowiedz"));
+                Grade examMath = gradeRepository.save(new Grade(getDateInFormat(2018, 3, 17), random.nextInt(5) + 1, "Sprawdzian"));
+                Grade smallExamMath = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 21), random.nextInt(5) + 1, "Kartkowka"));
+                Grade speachMath = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 1), random.nextInt(5) + 1, "Odpowiedz"));
+                Grade examGeo = gradeRepository.save(new Grade(getDateInFormat(2018, 3, 17), random.nextInt(5) + 1, "Sprawdzian"));
+                Grade smallExamGeo = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 21), random.nextInt(5) + 1, "Kartkowka"));
+                Grade speachGeo = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 1), random.nextInt(5) + 1, "Odpowiedz"));
+                Grade examEng = gradeRepository.save(new Grade(getDateInFormat(2018, 3, 17), random.nextInt(5) + 1, "Sprawdzian"));
+                Grade smallExamEng = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 21), random.nextInt(5) + 1, "Kartkowka"));
+                Grade speachEng = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 1), random.nextInt(5) + 1, "Odpowiedz"));
+                Grade examPhysic = gradeRepository.save(new Grade(getDateInFormat(2018, 3, 17), random.nextInt(5) + 1, "Sprawdzian"));
+                Grade smallExamPhysic = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 21), random.nextInt(5) + 1, "Kartkowka"));
+                Grade speachPhysic = gradeRepository.save(new Grade(getDateInFormat(2018, 2, 1), random.nextInt(5) + 1, "Odpowiedz"));
 
-        studentFour.setSchoolClass(schoolClassMath);
-        schoolClassMath.getStudents().add(studentFour);
-        studentFive.setSchoolClass(schoolClassMath);
-        schoolClassMath.getStudents().add(studentFive);
-        studentSix.setSchoolClass(schoolClassMath);
-        schoolClassMath.getStudents().add(studentSix);
+                userModel.setUserDetails(student);
+                student.setUserModel(userModel);
 
-        studentFour.getExercises().add(exerciseMathOne);
-        exerciseMathOne.getStudents().add(studentFour);
-        studentFive.getExercises().add(exerciseMathOne);
-        exerciseMathOne.getStudents().add(studentFive);
-        studentSix.getExercises().add(exerciseMathOne);
-        exerciseMathOne.getStudents().add(studentSix);
+                student.setSchoolClass(schoolClass);
+                schoolClass.getStudents().add(student);
 
-        studentFour.getGrades().add(gradeFour);
-        gradeFour.setStudent(studentFour);
-        studentFive.getGrades().add(gradeFive);
-        gradeFive.setStudent(studentFive);
-        studentSix.getGrades().add(gradeSix);
-        gradeSix.setStudent(studentSix);
+                student.getExercises().add(chemy);
+                student.getExercises().add(math);
+                student.getExercises().add(geographic);
+                student.getExercises().add(english);
+                student.getExercises().add(physic);
+                chemy.getStudents().add(student);
+                math.getStudents().add(student);
+                geographic.getStudents().add(student);
+                english.getStudents().add(student);
+                physic.getStudents().add(student);
 
-        gradeFour.setExercise(exerciseMathOne);
-        exerciseMathOne.getGrades().add(gradeFour);
-        gradeFive.setExercise(exerciseMathOne);
-        exerciseMathOne.getGrades().add(gradeFive);
-        gradeSix.setExercise(exerciseMathOne);
-        exerciseMathOne.getGrades().add(gradeSix);
+                student.getGrades().add(examChemy);
+                student.getGrades().add(smallExamChemy);
+                student.getGrades().add(speachChemy);
+                student.getGrades().add(examMath);
+                student.getGrades().add(smallExamMath);
+                student.getGrades().add(speachMath);
+                student.getGrades().add(examGeo);
+                student.getGrades().add(smallExamGeo);
+                student.getGrades().add(speachGeo);
+                student.getGrades().add(examEng);
+                student.getGrades().add(smallExamEng);
+                student.getGrades().add(speachEng);
+                student.getGrades().add(examPhysic);
+                student.getGrades().add(smallExamPhysic);
+                student.getGrades().add(speachPhysic);
+                examChemy.setStudent(student);
+                smallExamChemy.setStudent(student);
+                speachChemy.setStudent(student);
+                examMath.setStudent(student);
+                smallExamMath.setStudent(student);
+                speachMath.setStudent(student);
+                examGeo.setStudent(student);
+                smallExamGeo.setStudent(student);
+                speachGeo.setStudent(student);
+                examEng.setStudent(student);
+                smallExamEng.setStudent(student);
+                speachEng.setStudent(student);
+                examPhysic.setStudent(student);
+                smallExamPhysic.setStudent(student);
+                speachPhysic.setStudent(student);
 
-        userModelRepository.save(studentFourUserModel);
-        userModelRepository.save(studentFiveUserModel);
-        userModelRepository.save(studentSixUserModel);
+                examChemy.setExercise(chemy);
+                smallExamChemy.setExercise(chemy);
+                speachChemy.setExercise(chemy);
+                chemy.getGrades().add(examChemy);
+                chemy.getGrades().add(smallExamChemy);
+                chemy.getGrades().add(speachChemy);
+                examMath.setExercise(math);
+                smallExamMath.setExercise(math);
+                speachMath.setExercise(math);
+                math.getGrades().add(examMath);
+                math.getGrades().add(smallExamMath);
+                math.getGrades().add(speachMath);
+                examGeo.setExercise(geographic);
+                smallExamGeo.setExercise(geographic);
+                speachGeo.setExercise(geographic);
+                geographic.getGrades().add(examGeo);
+                geographic.getGrades().add(smallExamGeo);
+                geographic.getGrades().add(speachGeo);
+                examEng.setExercise(english);
+                smallExamEng.setExercise(english);
+                speachEng.setExercise(english);
+                english.getGrades().add(examEng);
+                english.getGrades().add(smallExamEng);
+                english.getGrades().add(speachEng);
+                examPhysic.setExercise(physic);
+                smallExamPhysic.setExercise(physic);
+                speachPhysic.setExercise(physic);
+                physic.getGrades().add(examPhysic);
+                physic.getGrades().add(smallExamPhysic);
+                physic.getGrades().add(speachPhysic);
 
-        studentRepository.save(studentFour);
-        studentRepository.save(studentFive);
-        studentRepository.save(studentSix);
+                userModelRepository.save(userModel);
+                studentRepository.save(student);
 
-        gradeRepository.save(gradeFour);
-        gradeRepository.save(gradeFive);
-        gradeRepository.save(gradeSix);
+                gradeRepository.save(examChemy);
+                gradeRepository.save(smallExamChemy);
+                gradeRepository.save(speachChemy);
+                gradeRepository.save(examMath);
+                gradeRepository.save(smallExamMath);
+                gradeRepository.save(speachMath);
+                gradeRepository.save(examGeo);
+                gradeRepository.save(smallExamGeo);
+                gradeRepository.save(speachGeo);
+                gradeRepository.save(examEng);
+                gradeRepository.save(smallExamEng);
+                gradeRepository.save(speachEng);
+                gradeRepository.save(examPhysic);
+                gradeRepository.save(smallExamPhysic);
+                gradeRepository.save(speachPhysic);
 
-        exerciseRepository.save(exerciseMathOne);
-        UserModel userModel = new UserModel("admin@mail.com", "admin","adminpass",UserRole.ADMIN.name());
+            }
+            exerciseRepository.save(chemy);
+            exerciseRepository.save(math);
+            exerciseRepository.save(geographic);
+            exerciseRepository.save(english);
+            exerciseRepository.save(physic);
+
+            schoolClassRepository.save(schoolClass);
+        }
+
+        UserModel userModel = new UserModel("admin@mail.com", "admin", "adminpass", UserRole.ADMIN.name());
         userModelRepository.save(userModel);
     }
 
