@@ -4,6 +4,7 @@ import com.application.exceptions.notfound.*;
 import com.application.rest.GradeController;
 import com.application.service.GradeService;
 import com.application.tools.TokenUsernameParserService;
+import com.domain.AverageGradesOfStudent;
 import com.domain.ExerciseAndGrades;
 import com.entities.*;
 import com.repositories.ExerciseRepository;
@@ -123,5 +124,30 @@ public class GradeServiceImpl implements GradeService {
         gradeRepository.save(grade);
         studentRepository.save(student);
         exerciseRepository.save(exercise);
+    }
+
+
+    public List<AverageGradesOfStudent> getAverageGradesOfAllStudents() {
+        Query query = em.createNativeQuery("SELECT student.id, student.first_name, student.last_name, school_class.name, school_class.profile, avg(grade.grade)" +
+                "from grade inner join student on (grade.student_id = student.id )" +
+                "inner join school_class on (student.school_class_id = school_class.id)" +
+                "group by student.id, school_class.name, school_class.profile order by avg desc");
+        List result = query.getResultList();
+        List<AverageGradesOfStudent> averageGradesOfStudentList = new ArrayList<>();
+
+        for(Object p:result) {
+            Object[] fields = (Object[]) p;
+
+            averageGradesOfStudentList.add(AverageGradesOfStudent
+                    .builder()
+                    .studentId(Long.parseLong(fields[0].toString()))
+                    .firstName(fields[1].toString())
+                    .lastName(fields[2].toString())
+                    .schoolClassName(fields[3].toString())
+                    .schoolClassProfile(Profile.valueOf(fields[4].toString()))
+                    .averageGrades(Float.parseFloat(fields[5].toString()))
+                    .build());
+        }
+        return averageGradesOfStudentList;
     }
 }

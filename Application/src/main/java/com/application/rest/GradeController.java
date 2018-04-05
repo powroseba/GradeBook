@@ -2,6 +2,7 @@ package com.application.rest;
 
 import com.application.service.GradeService;
 import com.application.service.implementations.RabbitProducer;
+import com.domain.AverageGradesOfStudent;
 import com.domain.ExerciseAndGrades;
 import com.entities.Exercises;
 import com.entities.Grade;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/grades")
@@ -45,5 +47,10 @@ public class GradeController {
     @PreAuthorize("hasRole('STUDENT')")
     public void sendPDFWithMyGrades(HttpServletRequest request) {
         rabbitProducer.sendGrades(request);
+    }
+
+    @GetMapping(value = "/test")
+    public List<AverageGradesOfStudent> test() {
+        return gradeService.getAverageGradesOfAllStudents();
     }
 }
